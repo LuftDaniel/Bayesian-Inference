@@ -653,9 +653,9 @@ Nehme weiterhin an:
 
 Wir erhalten:
 \begin{align}
-\mathbb{P}(D \vert w,b, \mu, \xi, K) & = \prod_{i=1}^{N}\mathbb{P}(x_i,y_i \vert w,b, \mu, \xi, K) \\
-& \propto \prod_{i=1}^{N}\mathbb{P}(e_i\vert w,b, \mu, \xi, K) \\
-& \propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)
+\mathbb{P}(D \vert w,b, \mu, \xi, K) & = \prod_{i=1}^{n}\mathbb{P}(x_i,y_i \vert w,b, \mu, \xi, K) \\
+& \propto \prod_{i=1}^{n}\mathbb{P}(e_i\vert w,b, \mu, \xi, K) \\
+& \propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
 \end{align}
 wobei $\xi$ abhängig von $\mu$.
 
@@ -670,8 +670,8 @@ Ingesamt erhalten wir also
 \begin{align}
 	\mathbb{P}(w,b\vert D,\mu,\xi,K) &= \frac{\mathbb{P}(D\vert w,b, \mu,\xi,K)					\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}  \\
 	& \propto \mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K) \\
-	&\propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)exp(-\frac{\mu}{2}		w^Tw) \\
-	& = \exp(-\frac{\mu}{2}w^Tw - \frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)
+	&\propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)exp(-\frac{\mu}{2}		w^Tw) \\
+	& = \exp(-\frac{\mu}{2}w^Tw - \frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
 \end{align}
 
 Mit negativer log-Transformation erhalten wir den folgenden Satz.
@@ -692,7 +692,7 @@ Weiterhin sei der Fehler $e_i =  1 - y_i(w^T \phi(x_i) +b)$ normalverteilt. Dann
 sind die $e_i$ i.i.d. und für $\sigma_b^2 \rightarrow \infty$ gilt:
 
 \begin{center}
-$(\hat{w}_{MAP},\hat{b}_{MAP})  = \underset{w,b}{\arg \min \hspace{0.1cm}} \frac{\mu}{2}w^Tw + \frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2$
+$(\hat{w}_{MAP},\hat{b}_{MAP})  = \underset{w,b}{\arg \min \hspace{0.1cm}} \frac{\mu}{2}w^Tw + \frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2$
 
 unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 \end{center}
@@ -719,7 +719,7 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 	
 	\begin{block}{LS-SVM-Problem}
 		\begin{align}
-			\min \mathcal{J}(w,e)\;=\;&\min\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2\\
+			\min \mathcal{J}(w,b)\;=\;&\min\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2\\
 			\text{unter}\quad&y_i\left(w^T\varphi(x_i)+b\right)\;=\;1-e_i,\quad i=1,\dots,n
 		\end{align}
 	\end{block}
@@ -728,7 +728,7 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 \begin{frame}
 	Lagrange-Funktion des Optimierungsproblems:
 	\begin{align}
-		\mathcal{L}(w,b,e;\alpha)&\;=\;\mathcal{J}(w,e)-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e_i\right)\\
+		\mathcal{L}(w,b,e;\alpha)&\;=\;\mathcal{J}(w,b)-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e_i\right)\\
 		&\;=\;\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e\right)\\
 	\end{align}
 \end{frame}
@@ -811,7 +811,6 @@ MEHR BEISPIELE ÜBERSICHTSARTIG,pro kontra
 \end{frame}
 
 
-
 \begin{frame}
 
 Gull (1988) verwendet folgende Annahmen:
@@ -845,23 +844,17 @@ Diagramm weiter zusammen mit Hyperparametern ( nur diese rot)
 Gestel, Suykens et. al. (2002) zeigten nach längerer Rechnung:
 
 \begin{center}
-$\mathbb{P}(D\vert \log(\mu),\log(\xi),K) \propto \frac{\sqrt{\mu^{n_f} \xi^N}}{\sqrt{det H}} \exp(- \mathcal{J}(w_{MAP},b_{MAP}))$,
+$\mathbb{P}(D\vert \log(\mu),\log(\xi),K) \propto \frac{\sqrt{\mu^{n_f} \xi^n}}{\sqrt{det H}} \exp(- \mathcal{J}(w_{MAP},b_{MAP}))$,
 \end{center}
 
 wobei 
 \begin{center}
-$\mathcal{J}(w,b) = \frac{\mu}{2}w^T w + \frac{\xi}{2}\overset{n}{\underset{i=1}{\sum}} e_i ^2 \text{ und } H = \begin{pmatrix}
-\frac{\partial^2 \mathcal{J}}{\partial w^2 } & \frac{\partial^2 \mathcal{J}}{\partial w \partial b } \\
-\frac{\partial^2 \mathcal{J}}{\partial b \partial w } & \frac{\partial^2 \mathcal{J}}{\partial b^2 }
-\end{pmatrix}.$
+	$\mathcal{J}(w,b) = \frac{\mu}{2}w^T w + \frac{\xi}{2}\overset{n}{\underset{i=1}			{\sum}} e_i ^2 \text{ und } H = \begin{pmatrix}
+	\frac{\partial^2 \mathcal{J}}{\partial w^2 } & \frac{\partial^2 \mathcal{J}}				{\partial w \partial b } \\
+	\frac{\partial^2 \mathcal{J}}{\partial b \partial w } & \frac{\partial^2 					\mathcal{J}}{\partial b^2 }
+	\end{pmatrix}.$
 \end{center}
-
-
-
-
 \end{frame}
-
-
 
 
 \begin{frame}
@@ -869,16 +862,14 @@ $\mathcal{J}(w,b) = \frac{\mu}{2}w^T w + \frac{\xi}{2}\overset{n}{\underset{i=1}
 Gestel, Suykens et. al. (2002) zeigten weiterhin, dass sich $\det H $ geschlossen angeben lässt:
 
 \begin{center}
-$det(H) = N \mu^{n_f - N_{eff}} \xi \underset{i=1}{\overset{N_{eff}}{\prod}}(\mu + \xi \lambda_i)$,
+$det(H) = n \mu^{n_f - N_{eff}} \xi \underset{i=1}{\overset{N_{eff}}{\prod}}(\mu + \xi \lambda_i)$,
 \end{center}
 
 wobei $N_{eff}$ die Anzahl der Eigenwerte $\lambda_i$ ungleich Null der zentrierten Matrix $M \Omega M$ mit
 \begin{center}
-$\Omega_{i,j} = K(x_i, x_j)$ und $M = I_N + \frac{1}{N} 1_v 1_v^T$.
+$\Omega_{i,j} = K(x_i, x_j)$ und $M = I_n + \frac{1}{n} 1_v 1_v^T$.
 \end{center}
 Nutze die Darstellung der Determinante, bilde negative Logtransformierte und erhalte das Hyperparameter Problem.
-
-
 \end{frame}
 
 
@@ -888,8 +879,8 @@ Nutze die Darstellung der Determinante, bilde negative Logtransformierte und erh
 Seien die Voraussetzungen an a priori Verteilungen wie zuvor. Dann sind die MAP-Schätzer der Hyperparameter gegeben durch
 
 \begin{align}
-(\mu_{MAP}, \xi_{MAP}) = \underset{\mu, \xi}{\arg \min} & \hspace{0.2cm}\mathcal{J}(w_{MAP}, b_{MAP}) + \frac{1}{2}\sum_{i=1}^{N_{eff}}\log(\mu + \xi \lambda_i) \\
-&- \frac{N_{eff}}{2}\log(\mu) + \frac{N -1 }{2}\log(\xi)
+(\hat{\mu}_{MAP}, \hat{\xi}_{MAP}) = \underset{\mu, \xi}{\arg \min} & \hspace{0.2cm}\mathcal{J}(w_{MAP}, b_{MAP}) + \frac{1}{2}\sum_{i=1}^{N_{eff}}\log(\mu + \xi \lambda_i) \\
+&- \frac{N_{eff}}{2}\log(\mu) + \frac{n -1 }{2}\log(\xi)
 \end{align}
 
 
@@ -920,7 +911,7 @@ Welche Kernels sind bei gegebenem Problem zu bevorzugen?\\
 \begin{frame}
 
 \begin{block}{Bayes Faktor}
-Seien $\mathcal{M}_1,...,\mathcal{M}_M$ Modelle, seien $D$ ein zugehöriger Datenvektor.
+Seien $\mathcal{M}_1,...,\mathcal{M}_M$ Modelle, sei $D$ ein zugehöriger Datenvektor.
 Dann ist der Bayes Faktor definiert durch:
 \begin{center}
 $B(\mathcal{M}_i, \mathcal{M}_j):= \frac{\mathbb{P}(D\vert \mathcal{M}_i)}{\mathbb{P}(D\vert \mathcal{M}_j)} = \frac{\int\mathbb{P}(D\vert \theta_i, \mathcal{M}_i )d\mathbb{P}(\theta_i)}{\int\mathbb{P}(D\vert \theta_j, \mathcal{M}_j )d\mathbb{P}(\theta_j)}$
@@ -970,14 +961,14 @@ $\log(\mu_i) \sim \mathcal{N}(0, \sigma_{\mu_i}^2), \log(\xi_i) \sim \mathcal{N}
 
 \begin{frame}
 
-\begin{block}{Kernelselektion bei LS-SVM, (MacKay, 1995,1999)}
+\begin{block}{Kernelselektion bei LS-SVM (MacKay, 1995,1999)}
 
 Es gelten die zuvor genannten Bedingungen an a priori Verteilungen. Weiterhin sei ein Datenvektor $D$ gegeben, so dass die a posteriori Verteilungen $\mathbb{P}(\log(\mu),\log(\xi) \vert D, K_i)$ eine positiv definite Kovarianzmatrix besitzt. Dann gilt für die Modellevidenz:
 
 
 \begin{align}
-\mathbb{P}(D \vert K_i) & \propto \mathbb{P}(D \vert \log(\mu_{i_{MAP}}), \log(\xi_{i_{MAP}}), K_i)\frac{\sigma_{\mu_i\vert D} \sigma_{\xi_i\vert D}}{\sigma_{\mu_i} \sigma_{\xi_i}}\\
-&\propto \sqrt{\frac{\mu^{N_{eff}}\xi^{N-1}}{(\gamma_{eff}-1)(N - \gamma_{eff}) \prod_{j=1}^{N_{eff}}(\mu_{i_{MAP}} + \xi_{i_{MAP}}\lambda_j)}}
+\mathbb{P}(D \vert K_i) & \propto \mathbb{P}(D \vert \log(\hat{\mu}_{i_{MAP}}), \log(\hat{\xi}_{i_{MAP}}), K_i)\frac{\sigma_{\mu_i\vert D} \sigma_{\xi_i\vert D}}{\sigma_{\mu_i} \sigma_{\xi_i}}\\
+&\propto \sqrt{\frac{\hat{\mu}^{N_{eff}}_{i_{MAP}} \hat{\xi}^{n-1}_{i_{MAP}}}{(\gamma_{eff}-1)(n - \gamma_{eff}) \prod_{j=1}^{N_{eff}}(\hat{\mu}_{i_{MAP}} + \hat{\xi}_{i_{MAP}}\lambda_j)}}
 \end{align}
 
 wobei $\gamma_{eff} = 1 + \sum_{i=1}^{N_{eff}}\frac{\xi_{i_{MAP}}\lambda_i}{\mu_{i_{MAP}} + \xi_{i_{MAP}}\lambda_i}$.
