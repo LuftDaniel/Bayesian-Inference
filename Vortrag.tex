@@ -1,5 +1,4 @@
 \documentclass{beamer}
-\usefonttheme[onlymath]{serif}
 \usetheme{Frankfurt}
 %\setbeamercovered{transparent}
 %\beamertemplatenavigationsymbolsempty
@@ -507,7 +506,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 \textcolor{red}{MODELL: HIER DIAGRAMM}
 
-$y = \text{sign}(w^T x + b)$
+$y = sign(w^T x + b)$
 
 %WAS SIND DIE RICHTIGEN ANNAHMEN GEWESEN?
 
@@ -550,7 +549,6 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 \end{frame}
 
 \begin{frame}
-\centering
 	\begin{tikzpicture}
 		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
 		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
@@ -558,7 +556,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 		\node [sum] (eps) at (0,0) {$e$}; 
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
 		%\node [red, sum] (alpha) at (4,2) {$\alpha$};
 
@@ -601,7 +599,6 @@ Bayes Framework:
 \end{frame}
 
 \begin{frame}
-\centering
 	\begin{tikzpicture}
 		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
 		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
@@ -609,9 +606,9 @@ Bayes Framework:
 		\node [sum] (eps) at (0,0) {$e$}; 
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
-		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+		%\node [red, sum] (alpha) at (4,2) {$\alpha$};
 
 		\draw[->,thick] (eps) -- (M);
 		\draw[->,thick] (w) -- (M);
@@ -619,8 +616,9 @@ Bayes Framework:
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		%\draw[->,thick, red] (lambda) -- (eps) node[block,minimum width=1cm, midway, fill=white] {$e\sim N(0,\sigma^2 I_n)$};
-		\draw[red,->,thick] (alpha) -- (w); 
+		%\draw[red,->,thick] (alpha) -- (w) node[block,minimum width=1cm, midway, fill=white] {$w\sim N(0,\alpha I_k)$}; 
 	\end{tikzpicture}
+	mit roten Pfeilen!
 \end{frame}
 
 \begin{frame}
@@ -642,28 +640,6 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 
 \end{frame}
 
-\begin{frame}
-\centering
-	\begin{tikzpicture}
-		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
-		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
-		\node [sum] (y) at (2,-3) {$y$};
-		\node [sum] (eps) at (0,0) {$e$}; 
-		\node [sum] (X) at (2,0) {$X$}; 
-		\node [sum] (w) at (4,0) {$w,b$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
-		\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(\mu_e,\sigma_e^2)$};
-		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
-
-		\draw[->,thick] (eps) -- (M);
-		\draw[->,thick] (w) -- (M);
-		\draw[->,thick] (X) -- (M);
-		\draw[->,thick] (M) -- (y);
-		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
-		\draw[->,thick, red] (lambda) -- (eps);
-		\draw[red,->,thick] (alpha) -- (w); 
-	\end{tikzpicture}
-\end{frame}
 
 \begin{frame}
 
@@ -679,7 +655,7 @@ Wir erhalten:
 \begin{align}
 \mathbb{P}(D \vert w,b, \mu, \xi, K) & = \prod_{i=1}^{n}\mathbb{P}(x_i,y_i \vert w,b, \mu, \xi, K) \\
 & \propto \prod_{i=1}^{n}\mathbb{P}(e_i\vert w,b, \mu, \xi, K) \\
-& \propto \exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
+& \propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
 \end{align}
 wobei $\xi$ abhängig von $\mu$.
 
@@ -694,7 +670,7 @@ Ingesamt erhalten wir also
 \begin{align}
 	\mathbb{P}(w,b\vert D,\mu,\xi,K) &= \frac{\mathbb{P}(D\vert w,b, \mu,\xi,K)					\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}  \\
 	& \propto \mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K) \\
-	&\propto \exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)\exp(-\frac{\mu}{2}		w^Tw) \\
+	&\propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)exp(-\frac{\mu}{2}		w^Tw) \\
 	& = \exp(-\frac{\mu}{2}w^Tw - \frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
 \end{align}
 
@@ -950,25 +926,19 @@ Dieser ermöglicht Wahl eines Modells anhand von größter Evidenz!
 
 
 \begin{frame}
-
-Platziere (diskrete) a priori Verteilung auf die Kerne $K_i$:
-\begin{center}
-
-$\mathbb{P}(K_i) = p_i, \sum_{i=1}^{m} \mathbb{P}(K_i) = 1$
-
-\end{center}
-
-Wir nehmen ein Gleichverteilung an, d.h. $p_i = p_j$ für alle $i,j = 1,...,M$.
-
-Weiterhin seien die Hyperparameter $\mu_i, \xi_i$ der jeweiligen Models mit Kern $K_i$ stochastisch unabhängig und haben folgende Verteilung:
-
-\begin{center}
-
-$\log(\mu_i) \sim \mathcal{N}(0, \sigma_{\mu_i}^2), \log(\xi_i) \sim \mathcal{N}(0, \sigma_{\xi_i}^2)$ 
-\end{center}
- mit $\sigma_{\mu_i}^2, \sigma_{\xi_i}^2 \rightarrow \infty$ für alle $i = 1,...,M$.
-
-
+Gestel, Suykens et. al. (2002) machen folgende Annahmen:
+\begin{itemize}
+	\item Platziere (diskrete) a priori Verteilung auf die Kerne $K_i$:
+		\begin{center}
+			$\mathbb{P}(K_i) = p_i, \sum_{i=1}^{m} \mathbb{P}(K_i) = 1$
+		\end{center}
+	\item Nehme eine Gleichverteilung an, d.h. $p_i = p_j$ für alle $i,j = 1,...,M$.
+	\item Seien die Hyperparameter $\mu_i, \xi_i$ der jeweiligen Models mit Kern $K_i$ 				  stochastisch unabhängig und haben folgende Verteilung:
+		  \begin{center}
+				$\log(\mu_i) \sim \mathcal{N}(0, \sigma_{\mu_i}^2), \log(\xi_i) \sim 						\mathcal{N}(0, \sigma_{\xi_i}^2)$ 
+		  \end{center}
+	\item $\sigma_{\mu_i}^2, \sigma_{\xi_i}^2 \rightarrow \infty$ für alle $i = 1,...,M				   $.
+\end{itemize}
 \end{frame}
 
 %\begin{frame}
@@ -995,7 +965,7 @@ Es gelten die zuvor genannten Bedingungen an a priori Verteilungen. Weiterhin se
 &\propto \sqrt{\frac{\hat{\mu}^{N_{eff}}_{i_{MAP}} \hat{\xi}^{n-1}_{i_{MAP}}}{(\gamma_{eff}-1)(n - \gamma_{eff}) \prod_{j=1}^{N_{eff}}(\hat{\mu}_{i_{MAP}} + \hat{\xi}_{i_{MAP}}\lambda_j)}}
 \end{align}
 
-wobei $\gamma_{eff} = 1 + \sum_{i=1}^{N_{eff}}\frac{\xi_{i_{MAP}}\lambda_i}{\mu_{i_{MAP}} + \xi_{i_{MAP}}\lambda_i}$.
+wobei $\gamma_{eff} = 1 + \sum_{i=1}^{N_{eff}}\frac{\hat{\xi}_{i_{MAP}}\lambda_i}{\hat{\mu}_{i_{MAP}} + \hat{\xi}_{i_{MAP}}\lambda_i}$.
 
 \end{block}
 
@@ -1013,7 +983,9 @@ wobei $\gamma_{eff} = 1 + \sum_{i=1}^{N_{eff}}\frac{\xi_{i_{MAP}}\lambda_i}{\mu_
 	\centering\includegraphics[scale=0.9]{Algo.pdf}
 \end{frame}
 
-%ö, schreibe Hyperparameterproblem (level 2), ergänze für jeden Kernel muss man den durchgang, eigenwertproblem rausholen 
+\begin{frame}
+	\centering\includegraphics[scale=0.7]{humanshistory.pdf}
+\end{frame}
 
 
 %KICK ME?
