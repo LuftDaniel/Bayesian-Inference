@@ -247,7 +247,7 @@ Seien die Modellparameter $\theta$ eine $\mathbb{R}^n$-wertige Zufallsvariable. 
 
 \begin{frame}{Trainieren des Priors: Posterior}
 	\begin{block}{Definition: A posteriori Verteilung}
-	Seien $\theta$ Modellparameter des Modells mit a priori Verteilung $\mathbb{P}^\theta$. Sei $x=(x_1,...,x_n)$ ein Datenvektor aus Realisationen von $X$. Dann heißt
+	Seien $\theta$ Modellparameter des Modells mit a priori Verteilung $\mathbb{P}(\theta)$. Sei $x=(x_1,...,x_n)$ ein Datenvektor aus Realisationen von $X$. Dann heißt
 	\begin{center}
 		$\mathbb{P}(\theta\vert x):= \frac{\mathbb{P}(x\vert \theta)\mathbb{P}(\theta)}{\mathbb{P}(x)}=
 		\frac{\mathbb{P}(x\vert \theta)\mathbb{P}(\theta)}{\int\mathbb{P}(x\vert \theta)d\mathbb{P}(\theta)}$
@@ -259,11 +259,16 @@ Seien die Modellparameter $\theta$ eine $\mathbb{R}^n$-wertige Zufallsvariable. 
 
 \begin{frame}{Traditioneller Bayesianischer Ansatz:}
 
-Behandle Parameter $\theta$ wie Zufallsvariablen:\\
-Statt Punktschätzer zu bilden, analysiere die Zufallsvariable mit Methoden der Wahrscheinlichkeitstheorie. Zum Beispiel Momente berechnen, Quantile etc.
-
+Behandle Parameter $\theta$ wie Zufallsvariablen mit Verteilung $\mathbb{P}(\theta \vert x)$:\\
+\begin{itemize}
+	\item berechne Momente (Erwartungswert, Varianz...)
+	\item berechne Konfidenzintervalle
+	\item berechne Quantile
+	\item ...
+\end{itemize}
+Beispiel:
 \begin{center}
-$\hat{\theta}_{Bayes} = \mathbb{E}_{\theta \vert D}[\theta]$
+$\hat{\theta}_{Bayes} = \mathbb{E}_{\theta \vert x}[\theta]$
 \end{center}
 
 %ACHTUNG: POSTERIOR KOMPLETT BERECHNEN --> NEUE PROBLEME UND ALGORITHMEN
@@ -276,7 +281,7 @@ $\hat{\theta}_{Bayes} = \mathbb{E}_{\theta \vert D}[\theta]$
 \begin{frame}
 \begin{block}{Definition: MAP Schätzer}
 
-Sei $x= (x_1,\dots,x_n)$ ein Datenvektor generiert durch $X$. Weiterhin sei $\mathbb{P}(\theta)$ die a priori Verteilung der Parameter von $X$. Dann heißt
+Sei $x= (x_1,\dots,x_n)$ ein Datenvektor generiert durch $X$. Weiterhin sei $\mathbb{P}(\theta)$ die a priori Verteilung der Parameter $\theta$. Dann heißt
 
 \begin{align}
 \hat{\theta}_{MAP} & := \arg\underset{\theta \in \Theta}{\max}\hspace{0.3mm} \mathbb{P}(\theta \vert x)
@@ -418,10 +423,12 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 \begin{frame}
 	Annahme: $w\sim Laplace(0, \tau)$ mit der Dichte
 	\begin{align}
-		f_{Laplace}(x|\mu,\sigma)\;=\;\frac{1}{2\sigma}\exp\left(-\frac{\left|x-\mu\right|}{\sigma}\right)
+		f_{Laplace}(x|\mu,\tau)\;=\;\frac{1}{2\tau}\exp\left(-\frac{\left|x-\mu\right|}{\tau}\right)
 	\end{align}
 	\centering\includegraphics[scale=0.4]{laplacedens.pdf}
 \end{frame}
+
+%SIGMA ZU TAU IN DIAGRAMM
 
 \begin{frame}
 	\centering
@@ -548,8 +555,8 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 		\node [sum] (y) at (2,-3) {$y$};
 		\node [sum] (eps) at (0,0) {$e$}; 
 		\node [sum] (X) at (2,0) {$X$}; 
-		\node [sum] (w) at (4,0) {$w$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T x + b)$};
+		\node [sum] (w) at (4,0) {$w,b$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
 		%\node [red, sum] (alpha) at (4,2) {$\alpha$};
 
@@ -579,18 +586,16 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 \begin{frame}
 
-Bayes Framework: Nehme an $w, b$ sind Zufallsvariablen mit a priori Verteilungen!
+Bayes Framework: 
 
-Trainiere Posterior mit Daten $D$:
-
-\begin{center}
-
-$\mathbb{P}(w,b\vert D,\mu,\xi,K) = \dfrac{\mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}$
-
-\end{center}
-
-Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior weiter.
-
+\begin{itemize}
+	\item Nehme an $w, b$ sind Zufallsvariablen mit a priori Verteilungen!
+	\item Trainiere Posterior mit Daten $D$:
+		\begin{center}
+				$\mathbb{P}(w,b\vert D,\mu,\xi,K) = \dfrac{\mathbb{P}(D\vert w,b, \mu,						\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}$
+		\end{center}
+	\item Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior 				  weiter.
+\end{itemize}	
 \end{frame}
 
 \begin{frame}
@@ -598,14 +603,14 @@ Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior weite
 		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
 		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
 		\node [sum] (y) at (2,-3) {$y$};
-		\node [sum, red] (eps) at (0,0) {$e$}; 
+		\node [sum] (eps) at (0,0) {$e$}; 
 		\node [sum] (X) at (2,0) {$X$}; 
-		\node [sum] (w) at (4,0) {$w$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T x + b)$};
+		\node [sum] (w) at (4,0) {$w,b$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
 		%\node [red, sum] (alpha) at (4,2) {$\alpha$};
 
-		\draw[->,thick, red] (eps) -- (M);
+		\draw[->,thick] (eps) -- (M);
 		\draw[->,thick] (w) -- (M);
 		\draw[->,thick] (X) -- (M);
 		\draw[->,thick] (M) -- (y);
@@ -618,7 +623,12 @@ Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior weite
 
 \begin{frame}
 
-Nehme an, dass:   $w \sim \mathcal{N}(0,\frac{1}{\mu}), b \sim \mathcal{N}(0,\sigma^2_b)$ stochastisch unabhängig mit $\sigma^2_b \rightarrow \infty$.
+Nehme an:
+\begin{itemize}
+	\item $w \sim \mathcal{N}(0,\frac{1}{\mu}), b \sim \mathcal{N}(0,\sigma^2_b)$
+	\item $w,b$ stochastisch unabhängig 
+	\item $\sigma^2_b \rightarrow \infty$
+\end{itemize}
 
 Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 
@@ -634,8 +644,14 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 \begin{frame}
 
 
-Nehme weiterhin normalverteilte Fehler $e_i$ und unabhängige identische Verteilung bei den Daten $D$ an und erhalte
+Nehme weiterhin an:
+\begin{itemize}
+	\item $e_i = 1 - y_i(w^T \phi(x_i) +b) \sim \mathcal{N}(\mu_e,\sigma^2_e)$ 
+	\item $e_i$ i.i.d.
+	\item $D$ i.i.d. Datensatz
+\end{itemize}
 
+Wir erhalten:
 \begin{align}
 \mathbb{P}(D \vert w,b, \mu, \xi, K) & = \prod_{i=1}^{N}\mathbb{P}(x_i,y_i \vert w,b, \mu, \xi, K) \\
 & \propto \prod_{i=1}^{N}\mathbb{P}(e_i\vert w,b, \mu, \xi, K) \\
@@ -652,14 +668,13 @@ Ingesamt erhalten wir also
 %nebenbed e = 0
 
 \begin{align}
-\mathbb{P}(w,b\vert D,\mu,\xi,K) &= \frac{\mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}  \\
-& \propto \mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K) \\
-&\propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)exp(-\frac{\mu}{2}w^Tw) \\
-& = \exp(\frac{\mu}{2}w^Tw + \frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)
+	\mathbb{P}(w,b\vert D,\mu,\xi,K) &= \frac{\mathbb{P}(D\vert w,b, \mu,\xi,K)					\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}  \\
+	& \propto \mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K) \\
+	&\propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)exp(-\frac{\mu}{2}		w^Tw) \\
+	& = \exp(-\frac{\mu}{2}w^Tw - \frac{\xi}{2}\underset{i=1}{\overset{N}{\sum}}e_i^2)
 \end{align}
 
-mit dem Fehler $e_i = 1 - y_i(w^T \phi(x_i) +b)$.
-
+Mit negativer log-Transformation erhalten wir den folgenden Satz.
 
 \end{frame}
 
@@ -690,33 +705,11 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 	Geometrische Interpretation/ Vergleich LS SVM mit klass. SVM
 \end{frame}
 
-\begin{frame}
-\colorbox{red}{analytische form des posterior cool/ muss das sein/ appendix}
-Weiterhin gilt für die a posteriori Verteilung unter selben Annahmen folgende Identität:
-
-Sei $\mathcal{J}(w,b) = \frac{\mu}{2}w^T w + \frac{\xi}{2}\overset{n}{\underset{i=1}{\sum}} e_i ^2$.
-\begin{center}
-
-
-$p(w,b \vert D, \mu, \xi, K) = \frac{1}{\sqrt{2\pi^{n_f +1} det Q}} \exp(-\frac{1}{2} g^T Q^{-1} g)$,
-
-\end{center}
-
-wobei $Q = Cov(w,b) =  H^{-1} 
-= 
-\begin{pmatrix}
-\frac{\partial^2 \mathcal{J}}{\partial w^2 } & \frac{\partial^2 \mathcal{J}}{\partial w \partial b } \\
-\frac{\partial^2 \mathcal{J}}{\partial b \partial w } & \frac{\partial^2 \mathcal{J}}{\partial b^2 }
-\end{pmatrix}^{-1},
-$
-sowie $g = [w - w_{MAP}; b - b_{MAP}]$.
-
-
-%\colorbox{red}{(NOTATION???) + MULTILAYER PERCEPTRONS FÜHREN} \\ 
-%\colorbox{red}{NORMALERWEISE ZU NICHTKONVEXEN PROBLEMEN}\\
-%\colorbox{red}{+ indefinite kernel paper}
-\end{frame}
 % d.h. man kann damit auch traditionelle Bayes rechnungen geschlossen anstellen, learning ist nicht so schwer
+
+
+
+
 
 \subsection{Lösung LS SVM}
 
@@ -808,7 +801,7 @@ MEHR BEISPIELE ÜBERSICHTSARTIG,pro kontra
 \subsection{Schätzen der Hyperparameter}
 
 \begin{frame}
-	Gegeben sei ein Datensatz $D$ und ein Kern $K$. Wie findet man geeignete Hyperparameter $\mu, \xi$, welche den Grad der Regularisierung steuern?
+	Gegeben sei ein Datensatz $D$ und ein Kern $K$. Wie findet man geeignete Hyperparameter $\mu, \xi$?
 	\begin{itemize}
 		\item[1.]Antwort: Rumprobieren!
 		\item[2.]Antwort: Verwende Bayes-Theorie um Optimalitätskriterien herzuleiten!
@@ -821,9 +814,13 @@ MEHR BEISPIELE ÜBERSICHTSARTIG,pro kontra
 
 \begin{frame}
 
-Gull (1988) verwendete folgende a priori Verteilungen:
+Gull (1988) verwendet folgende Annahmen:
 
-$\log(\mu) \sim \mathcal{N}(0, \sigma_\mu^2), \log(\xi) \sim \mathcal{N}(0, \sigma_\xi^2)$ stochastisch unabhängig, mit $\sigma_\mu^2, \sigma_\xi^2 \rightarrow \infty$.
+\begin{itemize}
+	\item $\log(\mu) \sim \mathcal{N}(0, \sigma_\mu^2), \log(\xi) \sim \mathcal{N}(0, 				  \sigma_\xi^2)$ 
+	\item $\log(\mu), \log(\xi)$ stochastisch unabhängig
+	\item $\sigma_\mu^2, \sigma_\xi^2 \rightarrow \infty$.
+\end{itemize}
 
 Dann erhalten wir mit Unabhängigkeit und dem Satz von Bayes im Grenzwert:
 
@@ -1010,6 +1007,35 @@ wobei $\gamma_{eff} = 1 + \sum_{i=1}^{N_{eff}}\frac{\xi_{i_{MAP}}\lambda_i}{\mu_
 
 %dann beispiel, curse of dimensionality, bezug zu networks, variational techniques
 %hierarchical modelling evtl! (bei nets mit autoerkennung und marken mega coole anwendung!
+
+
+\begin{frame}
+\colorbox{red}{analytische form des posterior cool/ muss das sein/ appendix}
+Weiterhin gilt für die a posteriori Verteilung unter selben Annahmen folgende Identität:
+
+Sei $\mathcal{J}(w,b) = \frac{\mu}{2}w^T w + \frac{\xi}{2}\overset{n}{\underset{i=1}{\sum}} e_i ^2$.
+\begin{center}
+
+
+$p(w,b \vert D, \mu, \xi, K) = \frac{1}{\sqrt{2\pi^{n_f +1} det Q}} \exp(-\frac{1}{2} g^T Q^{-1} g)$,
+
+\end{center}
+
+wobei $Q = Cov(w,b) =  H^{-1} 
+= 
+\begin{pmatrix}
+\frac{\partial^2 \mathcal{J}}{\partial w^2 } & \frac{\partial^2 \mathcal{J}}{\partial w \partial b } \\
+\frac{\partial^2 \mathcal{J}}{\partial b \partial w } & \frac{\partial^2 \mathcal{J}}{\partial b^2 }
+\end{pmatrix}^{-1},
+$
+sowie $g = [w - w_{MAP}; b - b_{MAP}]$.
+
+
+%\colorbox{red}{(NOTATION???) + MULTILAYER PERCEPTRONS FÜHREN} \\ 
+%\colorbox{red}{NORMALERWEISE ZU NICHTKONVEXEN PROBLEMEN}\\
+%\colorbox{red}{+ indefinite kernel paper}
+\end{frame}
+
 
 
 \begin{frame}
