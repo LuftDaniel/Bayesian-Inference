@@ -1,4 +1,5 @@
 \documentclass{beamer}
+\usefonttheme[onlymath]{serif}
 \usetheme{Frankfurt}
 %\setbeamercovered{transparent}
 %\beamertemplatenavigationsymbolsempty
@@ -506,7 +507,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 \textcolor{red}{MODELL: HIER DIAGRAMM}
 
-$y = sign(w^T x + b)$
+$y = \text{sign}(w^T x + b)$
 
 %WAS SIND DIE RICHTIGEN ANNAHMEN GEWESEN?
 
@@ -549,6 +550,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 \end{frame}
 
 \begin{frame}
+\centering
 	\begin{tikzpicture}
 		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
 		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
@@ -556,7 +558,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 		\node [sum] (eps) at (0,0) {$e$}; 
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T \varphi(x) + b)$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
 		%\node [red, sum] (alpha) at (4,2) {$\alpha$};
 
@@ -599,6 +601,7 @@ Bayes Framework:
 \end{frame}
 
 \begin{frame}
+\centering
 	\begin{tikzpicture}
 		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
 		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
@@ -606,9 +609,9 @@ Bayes Framework:
 		\node [sum] (eps) at (0,0) {$e$}; 
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
-		\node [block, fill=white] (M) at (2, -1.5) {$y = sign(w^T \varphi(x) + b)$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
-		%\node [red, sum] (alpha) at (4,2) {$\alpha$};
+		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
 
 		\draw[->,thick] (eps) -- (M);
 		\draw[->,thick] (w) -- (M);
@@ -616,9 +619,8 @@ Bayes Framework:
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		%\draw[->,thick, red] (lambda) -- (eps) node[block,minimum width=1cm, midway, fill=white] {$e\sim N(0,\sigma^2 I_n)$};
-		%\draw[red,->,thick] (alpha) -- (w) node[block,minimum width=1cm, midway, fill=white] {$w\sim N(0,\alpha I_k)$}; 
+		\draw[red,->,thick] (alpha) -- (w); 
 	\end{tikzpicture}
-	mit roten Pfeilen!
 \end{frame}
 
 \begin{frame}
@@ -640,6 +642,28 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 
 \end{frame}
 
+\begin{frame}
+\centering
+	\begin{tikzpicture}
+		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
+		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
+		\node [sum] (y) at (2,-3) {$y$};
+		\node [sum] (eps) at (0,0) {$e$}; 
+		\node [sum] (X) at (2,0) {$X$}; 
+		\node [sum] (w) at (4,0) {$w,b$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
+		\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(\mu_e,\sigma_e^2)$};
+		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+
+		\draw[->,thick] (eps) -- (M);
+		\draw[->,thick] (w) -- (M);
+		\draw[->,thick] (X) -- (M);
+		\draw[->,thick] (M) -- (y);
+		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
+		\draw[->,thick, red] (lambda) -- (eps);
+		\draw[red,->,thick] (alpha) -- (w); 
+	\end{tikzpicture}
+\end{frame}
 
 \begin{frame}
 
@@ -655,7 +679,7 @@ Wir erhalten:
 \begin{align}
 \mathbb{P}(D \vert w,b, \mu, \xi, K) & = \prod_{i=1}^{n}\mathbb{P}(x_i,y_i \vert w,b, \mu, \xi, K) \\
 & \propto \prod_{i=1}^{n}\mathbb{P}(e_i\vert w,b, \mu, \xi, K) \\
-& \propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
+& \propto \exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
 \end{align}
 wobei $\xi$ abhängig von $\mu$.
 
@@ -670,7 +694,7 @@ Ingesamt erhalten wir also
 \begin{align}
 	\mathbb{P}(w,b\vert D,\mu,\xi,K) &= \frac{\mathbb{P}(D\vert w,b, \mu,\xi,K)					\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}  \\
 	& \propto \mathbb{P}(D\vert w,b, \mu,\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K) \\
-	&\propto exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)exp(-\frac{\mu}{2}		w^Tw) \\
+	&\propto \exp(-\frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)\exp(-\frac{\mu}{2}		w^Tw) \\
 	& = \exp(-\frac{\mu}{2}w^Tw - \frac{\xi}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2)
 \end{align}
 
@@ -907,23 +931,6 @@ Welche Kernels sind bei gegebenem Problem zu bevorzugen?\\
 		\item[2.]Antwort: Verwende Bayesianische Modellevidenz und vergleiche Evidenzen der Daten bei verschiedenen Kerneln!
 	\end{itemize}
 \end{frame}
-
-\begin{frame}
-
-\begin{block}{Bayes Faktor}
-Seien $\mathcal{M}_1,...,\mathcal{M}_M$ Modelle, sei $D$ ein zugehöriger Datenvektor.
-Dann ist der Bayes Faktor definiert durch:
-\begin{center}
-$B(\mathcal{M}_i, \mathcal{M}_j):= \frac{\mathbb{P}(D\vert \mathcal{M}_i)}{\mathbb{P}(D\vert \mathcal{M}_j)} = \frac{\int\mathbb{P}(D\vert \theta_i, \mathcal{M}_i )d\mathbb{P}(\theta_i)}{\int\mathbb{P}(D\vert \theta_j, \mathcal{M}_j )d\mathbb{P}(\theta_j)}$
-\end{center}
-\end{block}
-
-Dieser ermöglicht Wahl eines Modells anhand von größter Evidenz!
-
-%\colorbox{red}{erkläre, dass das gleich P(M | D) ist bei uniformem prior + ist nicht likelihood ratio}
-
-\end{frame}
-
 
 \begin{frame}
 Gestel, Suykens et. al. (2002) machen folgende Annahmen:
