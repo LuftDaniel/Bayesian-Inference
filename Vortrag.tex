@@ -114,7 +114,6 @@ Möchten ein Modell erstellen, welches Beziehung zwischen Objekten beschreibt.
 \end{frame}
 
 \begin{frame}
-Tikhonov, weight decay
 \centering
 	\begin{tikzpicture}
 		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
@@ -360,7 +359,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 \begin{frame}{Ridge-Schätzer}
 	Idee: Verwende anderen Schätzer, welcher besser konditioniert ist.
 	\begin{itemize}
-		\item[$\rightarrow$] Ridge-Schätzer
+		\item[$\rightarrow$] Ridge-Schätzer, nach Tikhonov/Tychonoff (1963)
 	\end{itemize}
 	\begin{align}
 		\hat{w}_{Ridge}\;=\;\left(X^TX+\lambda I\right)^{-1}Xy\\
@@ -446,7 +445,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 	\begin{align}
 		f_{Laplace}(x|\mu,\tau)\;=\;\frac{1}{2\tau}\exp\left(-\frac{\left|x-\mu\right|}{\tau}\right)
 	\end{align}
-	\centering\includegraphics[scale=0.4]{laplacedens.pdf}
+	\centering\includegraphics[scale=0.45]{laplacedens.pdf}
 \end{frame}
 
 \begin{frame}{Regressionsmodell}
@@ -490,6 +489,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 	\begin{align}
 		\hat{w}_{MAP}\;=\;\arg\underset{w}{\min}\left[\left(y-Xw\right)^T\left(y-Xw\right)+\lambda\sum_{i=1}^{k}\left|w_i\right|\right]
 	\end{align}
+	$\rightarrow\:$ least absolute shrinkage and selection operator
 \end{frame}
 
 \section{Bayesian Framework für SVM}
@@ -501,10 +501,6 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 
 \begin{frame}{Wiederholung: klassische Support Vector Machine}
 Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen $y_i = \pm 1$.
-
-\textcolor{red}{MODELL: HIER DIAGRAMM}
-
-$y = \text{sign}(w^T x + b)$
 
 %WAS SIND DIE RICHTIGEN ANNAHMEN GEWESEN?
 
@@ -608,15 +604,15 @@ Bayes Framework:
 		\node [sum] (w) at (4,0) {$w,b$};
 		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
 		%\node [sum, red] (lambda) at (0,2) {$\sigma$};
-		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
-
+		
 		\draw[->,thick] (eps) -- (M);
 		\draw[->,thick] (w) -- (M);
 		\draw[->,thick] (X) -- (M);
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		%\draw[->,thick, red] (lambda) -- (eps) node[block,minimum width=1cm, midway, fill=white] {$e\sim N(0,\sigma^2 I_n)$};
-		\draw[red,->,thick] (alpha) -- (w); 
+		\onslide<2->{\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+		\draw[red,->,thick] (alpha) -- (w);}
 	\end{tikzpicture}
 \end{frame}
 
@@ -632,8 +628,8 @@ Nehme an:
 Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 
 	\begin{align}
-	\mathbb{P}(w,b \vert \mu, \xi, K) &\propto exp(-\frac{\mu}{2}w^Tw)exp(-\frac{b^2}{2\sigma_b^2})\\
-	&\rightarrow exp(-\frac{\mu}{2}w^Tw)
+	\mathbb{P}(w,b \vert \mu, \xi, K) &\propto \exp(-\frac{\mu}{2}w^Tw)\exp(-\frac{b^2}{2\sigma_b^2})\\
+	&\rightarrow \exp(-\frac{\mu}{2}w^Tw)
 	\end{align}
 
 
@@ -649,7 +645,6 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
 		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
-		\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(\mu_e,\sigma_e^2)$};
 		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
 
 		\draw[->,thick] (eps) -- (M);
@@ -657,8 +652,9 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 		\draw[->,thick] (X) -- (M);
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
-		\draw[->,thick, red] (lambda) -- (eps);
-		\draw[red,->,thick] (alpha) -- (w); 
+		\draw[red,->,thick] (alpha) -- (w);
+		\onslide<2->{\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(\mu_e,\sigma_e^2)$};
+		\draw[->,thick, red] (lambda) -- (eps);}
 	\end{tikzpicture}
 \end{frame}
 
