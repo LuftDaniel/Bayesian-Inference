@@ -317,7 +317,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 
 \frame{\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
 
-\subsection{Ridge}
+\subsection{Ridge-Regression}
 
 % Ridge aus numerischer Richtung "herleiten" -> Eigenwerte, Konditionierung, Levenberg-Marquardt, Multikollinearität
 % https://stats.stackexchange.com/questions/151304/why-is-ridge-regression-called-ridge-why-is-it-needed-and-what-happens-when
@@ -350,22 +350,22 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 	\begin{align}
 		\hat{w}&\;=\;\arg\underset{w}{\min}\left[\left(y-\hat{y}\right)^T\left(y-\hat{y}\right)\right] \\
 		&\;=\;\arg\underset{w}{\min}\left[\left(y-Xw\right)^T\left(y-Xw\right)\right]\\
-	\end{align}
+	\end{align}\pause
 	Der (analytische) Schätzer für $w$ ergibt sich durch:
 	\begin{align}
 		\hat{w}\;=\;\left(X^TX\right)^{-1}Xy
-	\end{align}
+	\end{align}\pause
 	$\rightarrow\: X^TX$ zwar immer positiv semidefinit, kann aber schlecht konditioniert sein
 \end{frame}
 
 \begin{frame}{Ridge-Schätzer}
 	Idee: Verwende anderen Schätzer, welcher besser konditioniert ist.
-	\begin{itemize}
+	\begin{itemize}\pause
 		\item[$\rightarrow$] Ridge-Schätzer, nach Tikhonov/Tychonoff (1963)
 	\end{itemize}
 	\begin{align}
-		\hat{w}_{Ridge}\;=\;\left(X^TX+\lambda I\right)^{-1}Xy\\
-	\end{align}
+		\hat{w}_{Ridge}\;=\;\left(X^TX+\lambda I\right)^{-1}Xy
+	\end{align}\pause
 	\begin{itemize}
 		\item[$\rightarrow$] Ridge-Schätzer schon für kleines $\lambda$ gut konditioniert
 		\item[$\rightarrow$] Varianzen sind geringer, als beim OLS-Schätzer
@@ -373,15 +373,15 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Ridge-Regression}
 	Der Ridge-Schätzer minimiert folgendes Zielfunktional:
 	\begin{align}
 		\hat{w}_{Ridge}\;=\;\arg\underset{w}{\min}\left[\left(y-Xw\right)^T\left(y-Xw\right)+\lambda w^Tw\right]
-	\end{align}
+	\end{align}\pause
 	\hfill\\[0,5cm]
 	Es soll nun das obige Funktional mit Bayes Ansatz hergeleitet werden. Die grundlegenden Annahmen der linearen Regression können zunächst wie folgt interpretiert werden:
 	\begin{align}
-		\mathbb{P}(y\vert w)\;=\;\mathcal{N}(Xw,\sigma^2)
+		\mathbb{P}(y_i\vert w)\;=\;\mathcal{N}(X_iw,\sigma^2)
 	\end{align}
 \end{frame}
 
@@ -408,10 +408,10 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 \end{frame}
 
 \begin{frame}{Bayesian-Ridge}
-	A priori Annahme für Fehler $\varepsilon$ und Gewichte $w$ bei der Bayes Ridge Regression:
+	A priori Annahmen für Fehler $\varepsilon$ und Gewichte $w$ bei der Bayesian-Ridge-Regression:
 	\begin{align}
 		\varepsilon\sim \mathcal{N}(0, \sigma^2 I_n),\quad w\sim \mathcal{N}(0, \tau^2 I_k)
-	\end{align}
+	\end{align}\pause
 	Mit der Likelihood und den a priori Annahmen folgt:
 	\begin{align}
 		\mathcal{L}(w|y)&\;=\;\mathbb{P}(y|w)\\
@@ -421,32 +421,32 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 \end{frame}
 
 \begin{frame}{Bayesian-Ridge}
-	Mit der Transformation des Maximum a posteriori-Schätzers folgt:
+	Mit der Transformation des Maximum a posteriori-Schätzers ergibt sich:
 	\begin{alignat}{2}
 		\hat{w}_{\text{MAP}}&\;=\;\arg\underset{w}{\max}&& \log\mathbb{P}(y\vert w) + \log \mathbb{P}(w) \\
-		&\;=\;\arg\underset{w}{\max}&&\left[\log\left(\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}\right)\right)\right.\\	&\hspace{1,7cm}+&&\:\:\left.\log\left(\prod_{i=0}^{k}\frac{1}{\tau\sqrt{2\pi}}\exp\left(-\frac{w_i^2}{2\tau^2}\right)\right)\right]\\
-		&\;=\;\arg\underset{w}{\max} && \left[-\sum_{i=1}^{n}\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}-\sum_{i=1}^{k}\frac{w_i^2}{2\tau^2}\right]\\
+		\uncover<2->{&\;=\;\arg\underset{w}{\max}&&\left[\log\left(\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}\right)\right)\right.\\	&\hspace{1,7cm}+&&\:\:\left.\log\left(\prod_{i=1}^{k}\frac{1}{\tau\sqrt{2\pi}}\exp\left(-\frac{w_i^2}{2\tau^2}\right)\right)\right]}\\
+		\uncover<3->{&\;=\;\arg\underset{w}{\max} && \left[-\sum_{i=1}^{n}\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}-\sum_{i=1}^{k}\frac{w_i^2}{2\tau^2}\right]}\\
 	\end{alignat}
 \end{frame}
 
 \begin{frame}{Bayesian-Ridge}
 	\begin{alignat}{2}
 		&\;=\;\arg\underset{w}{\max} && \left[\frac{1}{2\sigma^2}\left(-\sum_{i=1}^{n}\left(y_i-X_iw\right)^2-\frac{\sigma^2}{\tau^2}\sum_{i=1}^{k}w_i^2\right)\right]\\
-		&\;=\;\arg\underset{w}{\min} && \left[\sum_{i=1}^{n}\left(y_i-X_iw\right)^2+\lambda\sum_{i=1}^{k}w_i^2\right] \\
-	\end{alignat}
+		\uncover<2->{&\;=\;\arg\underset{w}{\min} && \left[\sum_{i=1}^{n}\left(y_i-X_iw\right)^2+\lambda\sum_{i=1}^{k}w_i^2\right]} \\
+	\end{alignat}\pause\pause
 	Damit erhält man das Ridge-Optimierungsproblem
 	\begin{align}
 		\hat{w}_{MAP}\;=\;\arg\underset{w}{\min}\left[\left(y-Xw\right)^T\left(y-Xw\right)+\lambda w^Tw\right]
 	\end{align}
 \end{frame}
 
-\subsection{Lasso}
+\subsection{Lasso-Regression}
 
 \begin{frame}{Bayesian-Lasso}
 	Neue Annahme: $w\sim Laplace(0, \tau)$ mit der Dichte
 	\begin{align}
 		f_{Laplace}(x|\mu,\tau)\;=\;\frac{1}{2\tau}\exp\left(-\frac{\left|x-\mu\right|}{\tau}\right)
-	\end{align}
+	\end{align}\pause
 	\centering\includegraphics[scale=0.45]{laplacedens.pdf}
 \end{frame}
 
@@ -477,20 +477,20 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 	Mit der Annahme der laplaceverteilten Parameter folgt:
 	\begin{alignat}{2}
 		\hat{w}_{\text{MAP}}&\;=\;\arg\underset{w}{\max}&& \log\mathbb{P}(y\vert w) + \log \mathbb{P}(w) \\
-		&\;=\;\arg\underset{w}{\max}&&\left[\log\left(\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}\right)\right)\right.\\	&\hspace{1,7cm}+&&\:\:\left.\log\left(\prod_{i=0}^{k}\frac{1}{2\tau}\exp\left(-\frac{\left|w_i\right|}{\tau}\right)\right)\right]\\
-		&\;=\;\arg\underset{w}{\max} && \left[-\sum_{i=1}^{n}\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}-\sum_{i=1}^{k}\frac{\left|w_i\right|}{\tau}\right]\\
+		\uncover<2->{&\;=\;\arg\underset{w}{\max}&&\left[\log\left(\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}\right)\right)\right.\\	&\hspace{1,7cm}+&&\:\:\left.\log\left(\prod_{i=1}^{k}\frac{1}{2\tau}\exp\left(-\frac{\left|w_i\right|}{\tau}\right)\right)\right]}\\
+		\uncover<3->{&\;=\;\arg\underset{w}{\max} && \left[-\sum_{i=1}^{n}\frac{\left(y_i-X_iw\right)^2}{2\sigma^2}-\sum_{i=1}^{k}\frac{\left|w_i\right|}{\tau}\right]}\\
 	\end{alignat}
 \end{frame}
 
 \begin{frame}{Bayesian-Lasso}
 	\begin{alignat}{2}
 		&\;=\;\arg\underset{w}{\max} && \left[\frac{1}{2\sigma^2}\left(-\sum_{i=1}^{n}\left(y_i-X_iw\right)^2-\frac{\sigma^2}{2\tau}\sum_{i=1}^{k}\left|w_i\right|\right)\right]\\
-		&\;=\;\arg\underset{w}{\min} && \left[\sum_{i=1}^{n}\left(y_i-X_iw\right)^2+\lambda\sum_{i=1}^{k}\left|w_i\right|\right] \\
-	\end{alignat}
+		\uncover<2->{&\;=\;\arg\underset{w}{\min} && \left[\sum_{i=1}^{n}\left(y_i-X_iw\right)^2+\lambda\sum_{i=1}^{k}\left|w_i\right|\right]} \\
+	\end{alignat}\pause\pause
 	Damit erhält man das Lasso-Optimierungsproblem
 	\begin{align}
 		\hat{w}_{MAP}\;=\;\arg\underset{w}{\min}\left[\left(y-Xw\right)^T\left(y-Xw\right)+\lambda\sum_{i=1}^{k}\left|w_i\right|\right]
-	\end{align}
+	\end{align}\pause
 	$\rightarrow\:$ least absolute shrinkage and selection operator
 \end{frame}
 
@@ -728,15 +728,14 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 
 \begin{frame}{Lösung der LS-SVM}
 	\begin{block}{LS-SVM-Problem}
-		\begin{align}
-			\min \mathcal{J}(w,b)\;=\;&\min\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2\\
-			\text{unter}\quad&y_i\left(w^T\varphi(x_i)+b\right)\;=\;1-e_i,\quad i=1,\dots,n
-		\end{align}
+		\(\min \mathcal{J}(w,b)\;=\; \min\frac{1}{2}w^Tw+\frac{\gamma}{2}\underset{i=1}{\overset{n}{\sum}}e_i^2\)\\[0,3cm]
+		\(\qquad\text{unter}\quad y_i\left(w^T\varphi(x_i)+b\right)\;=\;1-e_i,\quad i=1,\dots,n\)
 	\end{block}
-	Lagrange-Funktion des Optimierungsproblems:
+	\hfill\\[0,3cm]
+	\pause Lagrange-Funktion des Optimierungsproblems:
 	\begin{align}
 		\mathcal{L}(w,b,e;\alpha)&\;=\;\mathcal{J}(w,b)-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e_i\right)\\
-		&\;=\;\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e\right)\\
+		\uncover<2->{&\;=\;\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e\right)}\\
 	\end{align}
 \end{frame}
 
@@ -754,12 +753,12 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 	Eliminierung von $w$ und $e$ liefert das LGS
 	\begin{alignat}{2}
 		&\sum_{i=1}^{n}\alpha_i \;=\;0 && \\
-		&y_i\;=\;\sum_{i=k}^{n}\alpha_k\varphi(x_k)^T\varphi(x_i)+b+\gamma^{-1}\alpha_i,\quad && i=1,\dots,n
+		&y_i\;=\;\sum_{i=1}^{n}\alpha_k\varphi(x_k)^T\varphi(x_i)+b+\gamma^{-1}\alpha_i,\quad && i=1,\dots,n
 	\end{alignat}
 \end{frame}
 
 \begin{frame}{Lösung der LS-SVM}
-	In Matrixschreibweise
+	In Matrixschreibweise lautet das LGS
 	\begin{align}
 		\begin{bmatrix}
 			0& 1_n^T \\[0,5cm]
@@ -772,15 +771,15 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 		\begin{bmatrix}
 			0 \\[0,2cm] 
 			y
-		\end{bmatrix} 
+		\end{bmatrix},
 	\end{align}
 	wobei
 	\begin{align}
 		y &\;=\;(y_1,\dots,y_n)^T,\\
 		1_n &\;=\;(1,\dots,1)^T\in\mathbb{R}^n,\\
 		\alpha &\;=\;(\alpha_1,\dots,\alpha_n)^T.
-	\end{align}
-	$\Omega\in\mathbb{R}^{n\times n}$ ist die Kernel-Matrix, welche mithilfe des Mercer-Theorems bestimmt wird.
+	\end{align}\pause
+	$\Omega\in\mathbb{R}^{n\times n}$ ist die Kernel-Matrix, welche nach dem Mercer-Theorem bestimmt wird.
 	\begin{align}
 		\Rightarrow\quad\Omega_{ij} \;=\;\varphi(x_i)^T\varphi(x_j)\;=\;K(x_i,x_j)
 	\end{align}
