@@ -659,7 +659,7 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		\draw[red,->,thick] (alpha) -- (w);
-		\onslide<2->{\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(\mu_e,\sigma_e^2)$};
+		\onslide<2->{\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(0,\frac{1}{\xi})$};
 		\draw[->,thick, red] (lambda) -- (eps);}
 	\end{tikzpicture}
 \end{frame}
@@ -669,7 +669,7 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 
 Nehme weiterhin an:
 \begin{itemize}
-	\item $e_i = 1 - y_i(w^T \phi(x_i) +b) \sim \mathcal{N}(\mu_e,\sigma^2_e)$ 
+	\item $e_i = 1 - y_i(w^T \phi(x_i) +b) \sim \mathcal{N}(0,\frac{1}{\xi})$ 
 	\item $e_i$ i.i.d.
 	\item $D$ i.i.d. Datensatz
 \end{itemize}
@@ -705,10 +705,10 @@ Mit negativer log-Transformation erhalten wir den folgenden Satz.
 
 \begin{frame}
 \begin{block}{Satz: Least-Squares SVM}
-Betrachte ein SVM Problem mit i.i.d. Daten $D = (x_i,y_i)_{i=1,...,n}$. Weiterhin seien die Parameter $w\in \mathbb{R}^n, b\in \mathbb{R}$ stochastisch unabhängig verteilt nach folgenden a priori Verteilungen:
+Betrachte ein SVM Problem mit i.i.d. Daten $D = (x_i,y_i)_{i=1,...,n}$. Weiterhin seien die Parameter $w\in \mathbb{R}^n, b\in \mathbb{R}$ stochastisch unabhängig und es gelten folgende a priori Verteilungen:
 
 \begin{center}
-$w \sim \mathcal{N}(0,\frac{1}{\mu}), b \sim \mathcal{N}(0, \sigma_b^2)$
+$w \sim \mathcal{N}(0,\frac{1}{\mu}), \: b \sim \mathcal{N}(0, \sigma_b^2), \: e_i \sim \mathcal{N}(0,\frac{1}{\xi})$
 \end{center}
  
 Weiterhin sei der Fehler $e_i =  1 - y_i(w^T \phi(x_i) +b)$ normalverteilt. Dann
@@ -786,22 +786,6 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 	\end{align}
 \end{frame}
 
-\begin{frame}{Beispiel}{Lu, van Gestel et al}
-
-%\colorbox{red}{FRAGWÜRDIG: SOLLEN WIR DAS ERWÄHNEN?}
-
-Aufklärung der Faktoren die auf gutartige/bösartige Ovarialkarzinome schließen lassen!
-
-Verwendung von Bayesianischen SVM mit verschiedenen Kernen.
-
-27 Faktoren: Alter, Postmenopause, Serummarker, Morphologie des Tumors,...
-
-
-MEHR BEISPIELE ÜBERSICHTSARTIG,pro kontra
-
-\end{frame}
-
-
 
 %überleitung über diskussion der hyperparameter zum regeln der regularisierung
 
@@ -843,7 +827,40 @@ Dann erhalten wir mit Unabhängigkeit und Definition der A Posteriori Verteilung
 
 \begin{frame}
 
-Diagramm weiter zusammen mit Hyperparametern ( nur diese rot)
+
+\centering
+	\begin{tikzpicture}
+		\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
+		\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
+		\node [sum] (y) at (2,-3) {$y$};
+		\node [sum] (eps) at (0,0) {$e$}; 
+		\node [sum] (X) at (2,0) {$X$}; 
+		\node [sum] (w) at (4,0) {$w,b$};
+		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
+		\node [block, text width=2.2cm] (alpha) at (4,1.75) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+
+		\draw[->,thick] (eps) -- (M);
+		\draw[->,thick] (w) -- (M);
+		\draw[->,thick] (X) -- (M);
+		\draw[->,thick] (M) -- (y);
+		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
+		\draw[->,thick] (alpha) -- (w);
+		\node [block, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(0,\frac{1}{\xi})$};
+		\draw[->,thick] (lambda) -- (eps);
+		 
+		\onslide<2->{
+		\node [sum, red] (mu) at (4,3) {$\mu$};
+		\node [sum, red] (xi) at (0,3) {$\xi$};
+		\draw[->, thick, red] (xi) -- (lambda);
+		\draw[->, thick, red] (mu) -- (alpha);		
+		
+		\node [block, red, text width=3cm] (vert_mu) at (4,4) {$\log(\mu) \sim \mathcal{N}(0,\sigma_\mu^2)$};		
+		\node [block, red, text width=3cm] (vert_xi) at (0,4) {$\log(\xi) \sim \mathcal{N}(0,\sigma_\xi^2)$};	
+		
+		\draw[->, thick, red] (vert_mu) -- (mu);
+		\draw[->, thick, red] (vert_xi) -- (xi);}	
+		
+	\end{tikzpicture}
 
 \end{frame}
 
@@ -889,7 +906,7 @@ Seien die Voraussetzungen an a priori Verteilungen wie zuvor. Dann sind die MAP-
 
 \begin{align}
 	(\hat{\mu}_{MAP}, \hat{\xi}_{MAP}) = \underset{\mu, \xi}{\arg \min} & \hspace{0.2cm}\mathcal{J}(\hat{w}_{MAP}, \hat{b}_{MAP}) + \frac{1}{2}\sum_{i=1}^{N_{eff}}\log(\mu + \xi \lambda_i) \\
-	&- \frac{N_{eff}}{2}\log(\mu) + \frac{n -1 }{2}\log(\xi)
+	&- \frac{N_{eff}}{2}\log(\mu) - \frac{n -1 }{2}\log(\xi)
 \end{align}
 
 
@@ -988,87 +1005,6 @@ wobei $\gamma_{eff} = 1 + \sum_{j=1}^{N_{eff}}\frac{\hat{\xi}_{i_{MAP}}\lambda_j
 %dann beispiel, curse of dimensionality, bezug zu networks, variational techniques
 %hierarchical modelling evtl! (bei nets mit autoerkennung und marken mega coole anwendung!
 
-
-\begin{frame}
-\colorbox{red}{analytische form des posterior cool/ muss das sein/ appendix}
-Weiterhin gilt für die a posteriori Verteilung unter selben Annahmen folgende Identität:
-
-Sei $\mathcal{J}(w,b) = \frac{\mu}{2}w^T w + \frac{\xi}{2}\overset{n}{\underset{i=1}{\sum}} e_i ^2$.
-\begin{center}
-
-
-$p(w,b \vert D, \mu, \xi, K) = \frac{1}{\sqrt{2\pi^{n_f +1} det Q}} \exp(-\frac{1}{2} g^T Q^{-1} g)$,
-
-\end{center}
-
-wobei $Q = Cov(w,b) =  H^{-1} 
-= 
-\begin{pmatrix}
-\frac{\partial^2 \mathcal{J}}{\partial w^2 } & \frac{\partial^2 \mathcal{J}}{\partial w \partial b } \\
-\frac{\partial^2 \mathcal{J}}{\partial b \partial w } & \frac{\partial^2 \mathcal{J}}{\partial b^2 }
-\end{pmatrix}^{-1},
-$
-sowie $g = [w - w_{MAP}; b - b_{MAP}]$.
-
-
-%\colorbox{red}{(NOTATION???) + MULTILAYER PERCEPTRONS FÜHREN} \\ 
-%\colorbox{red}{NORMALERWEISE ZU NICHTKONVEXEN PROBLEMEN}\\
-%\colorbox{red}{+ indefinite kernel paper}
-\end{frame}
-
-
-
-\begin{frame}
-
- 
- 
-Wie berechnet man Likelihood bei Modellen mit latenten Variablen? Nehme an, Datensatz ist i.i.d.:
-
-\begin{center}
-$\mathbb{P}(x\vert \theta) = \overset{N}{\underset{i=1}{\prod}}\mathbb{P}(x_i\vert \theta) = \overset{N}{\underset{i=1}{\prod}}\int\mathbb{P}(x_i, z_i\vert \theta)dz_i $
-\end{center}
-
-Dieser Ausdruck ist bei höher Datenmenge schwer berechenbar!
-
-\end{frame}
-
-\begin{frame}
-
-Betrachte die log-Likelihoodfunktion:
-
-\begin{center}
-$\mathcal{L}(\theta) = \log \mathbb{P}(x \vert \theta) = \overset{N}{\underset{i=1}{\sum}}\log(\int\mathbb{P}(x_i, z_i\vert \theta)dz_i)$
-\end{center}
-
-Da Logarithmus monoton ist, folgt
-\begin{center}
-$\hat{\theta}_{ML} = \arg\underset{\theta \in \Theta}{\max } \mathcal{L}(\theta)$
-\end{center}
-
-Falls latente Variablen im Modell, so können alle Messungen $x_i$ abhängig werden!
-
-$\rightarrow $ Berechnung von $\hat{\theta}_{ML}$ schwieriger!
-
-
-
-\end{frame}
-
-\begin{frame}
-
-Nehme für latente Variable $z_i$ Verteilung $q_{z_i}$ an und verwende Jensens's Ungleichung!
-
-\begin{center}
-
-$\mathcal{L}(\theta) =  \overset{N}{\underset{i=1}{\sum}}\log(\int\mathbb{P}(x_i, z_i\vert \theta)dz_i)=  \overset{N}{\underset{i=1}{\sum}}\log(\int\frac{q_{z_i}(z_i)\mathbb{P}(x_i, z_i\vert \theta)}{q_{z_i}(z_i)}dz_i) \geq \overset{N}{\underset{i=1}{\sum}}\int q_{z_i}(z_i)\log(\frac{\mathbb{P}(x_i, z_i\vert \theta)}{q_{z_i}(z_i)})dz_i
-= 
-\overset{N}{\underset{i=1}{\sum}}\int q_{z_i}(z_i)\log(\mathbb{P}(x_i, z_i\vert \theta))dz_i - \int q_{z_i}(z_i) \log(q_{z_i}(z_i))dz_i =: \mathcal{F}(q_{z_1},...,q_{z_N},\theta)
-$
-
-\end{center}
-
-%kommentar zu energie, entropie und freier energie Feynman
-
-\end{frame}
 
 \begin{frame}
 QUELLEN/VERWEISE?????
