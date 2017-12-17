@@ -194,12 +194,13 @@ Seien die Modellparameter $\theta$ eine $\mathbb{R}^n$-wertige Zufallsvariable. 
 \begin{frame}{Beispiel: Münzwurf}
 
 	\begin{minipage}{7cm}
-		Modelliere einen Münzwurf $X$! Annahmen:
+		Modelliere Auszahlung bei einem Spiel mit Münzwurf $X$! Annahmen:
 		
 		Modell:
 		
 		$X \sim Ber(p)$ mit Werten Kopf und Zahl.
 		
+		\pause
 		Prior:
 		
 		$p \sim Beta(\alpha,\beta)$\\
@@ -502,7 +503,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 %support vector machines beispiel mit ovarian tumors
 
 \begin{frame}{Wiederholung: klassische Support Vector Machine}
-Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen $y_i = \pm 1$.
+Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i \in \mathbb{R}^{n_f}$ und Klassen $y_i = \pm 1$.
 
 %WAS SIND DIE RICHTIGEN ANNAHMEN GEWESEN?
 
@@ -526,7 +527,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 \begin{frame}{Wiederholung: Support Vector Machine mit Soft Margin}
 
-Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen $y_i = \pm 1$.
+Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i \in \mathbb{R}^{n_f}$ und Klassen $y_i = \pm 1$.
 
 \pause
 \begin{block}{Primales Problem}
@@ -588,11 +589,8 @@ Wie leitet man eine SVM im Bayes Framework her?
 
 \begin{itemize}
 	\pause \item Nehme an $w, b$ sind Zufallsvariablen mit a priori Verteilungen!
-	\pause \item Trainiere Posterior mit Daten $D$:
-		\begin{center}
-				$\mathbb{P}(w,b\vert D,\mu,\xi,K) = \dfrac{\mathbb{P}(D\vert w,b, \mu,						\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}$
-		\end{center}
-	\pause \item Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior 				  weiter.
+	\pause \item Trainiere Posterior mit Daten $D$.
+	\pause \item Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende 					 Posterior weiter.
 \end{itemize}	
 \end{frame}
 
@@ -616,7 +614,7 @@ Wie leitet man eine SVM im Bayes Framework her?
 		%\draw[->,thick, red] (lambda) -- (eps) node[block,minimum width=1cm, midway, fill=white] {$e\sim N(0,\sigma^2 I_n)$};
 
 		\pause		
-		\onslide<2->{\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+		\onslide<2->{\node [red, block, text width=2.7cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu}I_{n_f})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
 		\draw[red,->,thick] (alpha) -- (w);}
 	\end{tikzpicture}
 \end{frame}
@@ -625,7 +623,7 @@ Wie leitet man eine SVM im Bayes Framework her?
 
 Nehme an:
 \begin{itemize}
-	\item $w \sim \mathcal{N}(0,\frac{1}{\mu}), b \sim \mathcal{N}(0,\sigma^2_b)$
+	\item $w \sim \mathcal{N}(0,\frac{1}{\mu}I_{n_f}), b \sim \mathcal{N}(0,\sigma^2_b)$
 	\item $w,b$ stochastisch unabhängig 
 	\item $\sigma^2_b \rightarrow \infty$
 \end{itemize}
@@ -651,7 +649,7 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
 		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
-		\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+		\node [red, block, text width=2.7cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu}I_{n_f})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
 
 		\draw[->,thick] (eps) -- (M);
 		\draw[->,thick] (w) -- (M);
@@ -659,7 +657,7 @@ Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		\draw[red,->,thick] (alpha) -- (w);
-		\onslide<2->{\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(0,\frac{1}{\xi})$};
+		\onslide<2->{\node [block, red, text width=2.5cm] (lambda) at (0,2) {$e_i \sim \mathcal{N}(0,\frac{1}{\xi})$};
 		\draw[->,thick, red] (lambda) -- (eps);}
 	\end{tikzpicture}
 \end{frame}
@@ -708,7 +706,7 @@ Mit negativer log-Transformation erhalten wir den folgenden Satz.
 Betrachte ein SVM Problem mit i.i.d. Daten $D = (x_i,y_i)_{i=1,...,n}$. Weiterhin seien die Parameter $w\in \mathbb{R}^n, b\in \mathbb{R}$ stochastisch unabhängig und es gelten folgende a priori Verteilungen:
 
 \begin{center}
-$w \sim \mathcal{N}(0,\frac{1}{\mu}), \: b \sim \mathcal{N}(0, \sigma_b^2), \: e_i \sim \mathcal{N}(0,\frac{1}{\xi})$
+$w \sim \mathcal{N}(0,\frac{1}{\mu}I_{n_f}), \: b \sim \mathcal{N}(0, \sigma_b^2), \: e_i \sim \mathcal{N}(0,\frac{1}{\xi})$
 \end{center}
  
 Weiterhin sei der Fehler $e_i =  1 - y_i(w^T \phi(x_i) +b)$ normalverteilt. Dann
@@ -836,7 +834,7 @@ Dann erhalten wir mit Unabhängigkeit und Definition der A Posteriori Verteilung
 		\node [sum] (X) at (2,0) {$X$}; 
 		\node [sum] (w) at (4,0) {$w,b$};
 		\node [block, fill=white] (M) at (2, -1.5) {$y = \text{sign}(w^T \varphi(x) + b)$};
-		\node [block, text width=2.2cm] (alpha) at (4,1.75) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
+		\node [block, text width=2.7cm] (alpha) at (4,1.75) {$w \sim \mathcal{N}(0,\frac{1}{\mu}I_{n_f})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
 
 		\draw[->,thick] (eps) -- (M);
 		\draw[->,thick] (w) -- (M);
@@ -844,7 +842,7 @@ Dann erhalten wir mit Unabhängigkeit und Definition der A Posteriori Verteilung
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		\draw[->,thick] (alpha) -- (w);
-		\node [block, text width=2.5cm] (lambda) at (0,2) {$e \sim \mathcal{N}(0,\frac{1}{\xi})$};
+		\node [block, text width=2.5cm] (lambda) at (0,2) {$e_i \sim \mathcal{N}(0,\frac{1}{\xi})$};
 		\draw[->,thick] (lambda) -- (eps);
 		 
 		\onslide<2->{
@@ -929,7 +927,7 @@ sowie den nichttrivialen Eigenwerten $\lambda_i$ der zentrierten Kernelmatrix.
 Welche Kernels sind bei gegebenem Problem zu bevorzugen?\\
 	\begin{itemize}
 		\item[1.]Antwort: \pause Verwende verschiedene Kernel und entscheide anhand von Plots oder Kreuzvalidieren welcher Kernel am besten geeignet ist oder besser aussieht!
-		\item[2.]Antwort: \pause Verwende Bayesianische Modellevidenz und vergleiche Evidenzen der Daten bei verschiedenen Kerneln!
+		\item[2.]Antwort: \pause Verwende Bayesianische Modellevidenz $\mathbb{P}(D\vert K_i)$ und vergleiche Evidenzen der Daten $D$ bei verschiedenen Kerneln $K_i$!
 	\end{itemize}
 \end{frame}
 
