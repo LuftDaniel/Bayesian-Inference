@@ -86,12 +86,12 @@
 
 \begin{frame}{Motivation}
 	\begin{itemize}
-		\item Was ist und wozu braucht man Bayes Theorie 
+		\item Was ist und wozu braucht man Bayes Theorie ?
 		\begin{itemize}
-			\item Grundlage der Lerntheorie
-			\item Erzeugung von mathematischen Problemen basierend auf Verteilungsannahmen
-			\item Basis für Modellselektion
-			\item Kombination von Modellannahmen und Daten
+			\pause \item Grundlage der Lerntheorie
+			\pause \item Erzeugung von mathematischen Problemen basierend auf Verteilungsannahmen
+			\pause \item Basis für Modellselektion
+			\pause \item Kombination von Modellannahmen und Daten
 		\end{itemize}
 	\end{itemize}
 	% Frequentist vs Bayesianer Diagramm
@@ -204,11 +204,12 @@ Seien die Modellparameter $\theta$ eine $\mathbb{R}^n$-wertige Zufallsvariable. 
 		
 		$p \sim Beta(\alpha,\beta)$\\
 		\begin{align}
-			f_{Beta}\left(\alpha,\beta\right)\;=\;\dfrac{\varGamma(\alpha+\beta)}{\varGamma(\alpha)\varGamma(\beta)}\;x^{\alpha-1}(1-x)^{\beta-1}
+			f_{Beta}\left(x\vert\alpha,\beta\right)\;=\;\dfrac{\varGamma(\alpha+\beta)}{\varGamma(\alpha)\varGamma(\beta)}\;x^{\alpha-1}(1-x)^{\beta-1}
 		\end{align}
 	\end{minipage}
 	\begin{minipage}{3cm}
 		\flushright
+		\pause
 		\begin{tikzpicture}
 			\tikzstyle{sum} = [draw, circle, minimum size=0.8cm, node distance=1.75cm]
 			\tikzstyle{block} = [draw, rectangle, minimum width = 2.75cm, minimum height = 0.5cm]
@@ -221,6 +222,7 @@ Seien die Modellparameter $\theta$ eine $\mathbb{R}^n$-wertige Zufallsvariable. 
 			\draw[->,thick] (M) -- (y);
 			\draw[->,thick] (p) -- (X) node[block, fill=white, midway, minimum width=1cm] {$X\sim Ber(p)$};}
 
+			\pause
 			\onslide<2->{\node [block, red] (Beta) at (2, 3.25) {$p\sim Beta(\alpha, \beta)$};
 			\node [sum,red] (alpha) at (1,4.5) {$\alpha$};
 			\node [sum,red] (beta) at (3,4.5) {$\beta$};
@@ -261,12 +263,12 @@ Seien die Modellparameter $\theta$ eine $\mathbb{R}^n$-wertige Zufallsvariable. 
 
 Behandle Parameter $\theta$ wie Zufallsvariablen mit Verteilung $\mathbb{P}(\theta \vert x)$:\\
 \begin{itemize}
-	\item berechne Momente (Erwartungswert, Varianz...)
-	\item berechne Konfidenzintervalle
-	\item berechne Quantile
-	\item ...
+	\pause \item berechne Momente (Erwartungswert, Varianz...)
+	\pause \item berechne Konfidenzintervalle
+	\pause \item berechne Quantile
+	\pause \item ...
 \end{itemize}
-Beispiel:
+\pause Beispiel:
 \begin{center}
 $\hat{\theta}_{Bayes} = \mathbb{E}_{\theta \vert x}[\theta]$
 \end{center}
@@ -504,6 +506,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 %WAS SIND DIE RICHTIGEN ANNAHMEN GEWESEN?
 
+\pause
 \begin{block}{Primales Problem}
 	\begin{center}
 	$ \underset{w, b}{\min} \frac{1}{2}\vert \vert w \vert \vert ^2_2$\\
@@ -511,7 +514,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 	\end{center}
 \end{block}
 
-
+\pause
 \begin{block}{Duales Problem}
 	\begin{center}
 	$\underset{\lambda}{\min} \frac{1}{2}\underset{i,j}{\sum} \lambda_i \lambda_j y_i y_j x_i^T x_j - \underset{i}{\sum}\lambda_i$ \\
@@ -525,7 +528,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen $y_i = \pm 1$.
 
-
+\pause
 \begin{block}{Primales Problem}
 	\begin{center}
 	$ \underset{w, b}{\min} \frac{1}{2}\vert \vert w \vert \vert ^2_2 + \xi \underset{i}{\sum}e_i, \xi > 0$\\
@@ -533,7 +536,7 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 	\end{center}
 \end{block}
 
-
+\pause
 \begin{block}{Duales Problem}
 	\begin{center}
 	$\underset{\lambda}{\min} \frac{1}{2}\underset{i,j}{\sum} \lambda_i \lambda_j y_i y_j x_i^T x_j - \underset{i}{\sum}\lambda_i$ \\
@@ -581,15 +584,15 @@ Gegeben ist ein Datensatz $(x_i,y_i)_{i=1,...,n}$ von Features $x_i$ und Klassen
 
 \begin{frame}
 
-Bayes Framework: 
+Wie leitet man eine SVM im Bayes Framework her? 
 
 \begin{itemize}
-	\item Nehme an $w, b$ sind Zufallsvariablen mit a priori Verteilungen!
-	\item Trainiere Posterior mit Daten $D$:
+	\pause \item Nehme an $w, b$ sind Zufallsvariablen mit a priori Verteilungen!
+	\pause \item Trainiere Posterior mit Daten $D$:
 		\begin{center}
 				$\mathbb{P}(w,b\vert D,\mu,\xi,K) = \dfrac{\mathbb{P}(D\vert w,b, \mu,						\xi,K)\mathbb{P}(w,b\vert \mu,\xi , K)}{\mathbb{P}(D\vert \mu,\xi,K)}$
 		\end{center}
-	\item Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior 				  weiter.
+	\pause \item Bilde MAP Schätzer $\hat{w}_{MAP}, \hat{b}_{MAP}$ oder verwende Posterior 				  weiter.
 \end{itemize}	
 \end{frame}
 
@@ -611,6 +614,8 @@ Bayes Framework:
 		\draw[->,thick] (M) -- (y);
 		%\draw[->,thick] (X) -- (y) node[block, midway, fill=white] {$y = Xw+\varepsilon$};
 		%\draw[->,thick, red] (lambda) -- (eps) node[block,minimum width=1cm, midway, fill=white] {$e\sim N(0,\sigma^2 I_n)$};
+
+		\pause		
 		\onslide<2->{\node [red, block, text width=2.2cm] (alpha) at (4,2) {$w \sim \mathcal{N}(0,\frac{1}{\mu})$\\ $b \sim \mathcal{N}(0,\sigma^2_b)$};
 		\draw[red,->,thick] (alpha) -- (w);}
 	\end{tikzpicture}
@@ -627,6 +632,7 @@ Nehme an:
 
 Daraus folgt für den gemeinsamen Prior der Parameter im Grenzwert:
 
+	\pause
 	\begin{align}
 	\mathbb{P}(w,b \vert \mu, \xi, K) &\propto \exp(-\frac{\mu}{2}w^Tw)\exp(-\frac{b^2}{2\sigma_b^2})\\
 	&\rightarrow \exp(-\frac{\mu}{2}w^Tw)
@@ -804,10 +810,10 @@ MEHR BEISPIELE ÜBERSICHTSARTIG,pro kontra
 \begin{frame}
 	Gegeben sei ein Datensatz $D$ und ein Kern $K$. Wie findet man geeignete Hyperparameter $\mu, \xi$?
 	\begin{itemize}
-		\item[1.]Antwort: Rumprobieren!
-		\item[2.]Antwort: Verwende Bayes-Theorie um Optimalitätskriterien herzuleiten!
+		\item[1.]Antwort: \pause Rumprobieren!
+		\item[2.]Antwort: \pause Verwende Bayes-Theorie um Optimalitätskriterien herzuleiten!
 	\end{itemize}
-	Was heißt optimal?\\
+	In welchem Sinne sollen wir Optimalität definieren?\\ \pause
 	Wir wählen den Maximum A Posteriori Ansatz!
 \end{frame}
 
@@ -822,8 +828,9 @@ Gull (1988) verwendet folgende Annahmen:
 	\item $\sigma_\mu^2, \sigma_\xi^2 \rightarrow \infty$.
 \end{itemize}
 
-Dann erhalten wir mit Unabhängigkeit und dem Satz von Bayes im Grenzwert:
+Dann erhalten wir mit Unabhängigkeit und Definition der A Posteriori Verteilung im Grenzwert:
 
+\pause
 \begin{align}
 &\mathbb{P}(\log(\mu), \log(\xi)\vert D, K)\\
  =& \frac{\mathbb{P}(D\vert \log(\mu),\log(\xi),K)\mathbb{P}(\log(\mu), \log(\xi) \vert K)}{\mathbb{P}(D\vert K)}  \\
@@ -845,7 +852,7 @@ Diagramm weiter zusammen mit Hyperparametern ( nur diese rot)
 Gestel, Suykens et. al. (2002) zeigten nach längerer Rechnung:
 
 \begin{center}
-$\mathbb{P}(D\vert \log(\mu),\log(\xi),K) \propto \frac{\sqrt{\mu^{n_f} \xi^n}}{\sqrt{det H}} \exp(- \mathcal{J}(w_{MAP},b_{MAP}))$,
+$\mathbb{P}(D\vert \log(\mu),\log(\xi),K) \propto \frac{\sqrt{\mu^{n_f} \xi^n}}{\sqrt{det H}} \exp(- \mathcal{J}(\hat{w}_{MAP},\hat{b}_{MAP}))$,
 \end{center}
 
 wobei 
@@ -870,6 +877,7 @@ wobei $N_{eff}$ die Anzahl der Eigenwerte $\lambda_i$ ungleich Null der zentrier
 \begin{center}
 $\Omega_{i,j} = K(x_i, x_j)$ und $M = I_n + \frac{1}{n} 1_v 1_v^T$.
 \end{center}
+\pause
 Nutze die Darstellung der Determinante, bilde negative Logtransformierte und erhalte das Hyperparameter Problem.
 \end{frame}
 
@@ -904,8 +912,8 @@ sowie den nichttrivialen Eigenwerten $\lambda_i$ der zentrierten Kernelmatrix.
 \begin{frame}
 Welche Kernels sind bei gegebenem Problem zu bevorzugen?\\
 	\begin{itemize}
-		\item[1.]Antwort: Verwende verschiedene Kernel und entscheide anhand von Plots oder Kreuzvalidieren welcher Kernel am besten geeignet ist oder besser aussieht!
-		\item[2.]Antwort: Verwende Bayesianische Modellevidenz und vergleiche Evidenzen der Daten bei verschiedenen Kerneln!
+		\item[1.]Antwort: \pause Verwende verschiedene Kernel und entscheide anhand von Plots oder Kreuzvalidieren welcher Kernel am besten geeignet ist oder besser aussieht!
+		\item[2.]Antwort: \pause Verwende Bayesianische Modellevidenz und vergleiche Evidenzen der Daten bei verschiedenen Kerneln!
 	\end{itemize}
 \end{frame}
 
@@ -917,6 +925,7 @@ Gestel, Suykens et. al. (2002) machen folgende Annahmen:
 			$\mathbb{P}(K_i) = p_i, \sum_{i=1}^{m} \mathbb{P}(K_i) = 1$
 		\end{center}
 	\item Nehme eine Gleichverteilung an, d.h. $p_i = p_j$ für alle $i,j = 1,...,M$.
+	\pause
 	\item Seien die Hyperparameter $\mu_i, \xi_i$ der jeweiligen Models mit Kern $K_i$ 				  stochastisch unabhängig und haben folgende Verteilung:
 		  \begin{center}
 				$\log(\mu_i) \sim \mathcal{N}(0, \sigma_{\mu_i}^2), \log(\xi_i) \sim 						\mathcal{N}(0, \sigma_{\xi_i}^2)$ 
@@ -1060,5 +1069,10 @@ $
 %kommentar zu energie, entropie und freier energie Feynman
 
 \end{frame}
+
+\begin{frame}
+QUELLEN/VERWEISE?????
+\end{frame}
+
 
 \end{document}
