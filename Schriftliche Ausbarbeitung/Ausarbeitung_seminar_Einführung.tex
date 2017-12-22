@@ -131,13 +131,52 @@ Gegeben eines Priors möchte man nun die statistischen Daten eines Modells in di
 		$\mathbb{P}(\theta \vert D) := \frac{\mathbb{P}(D \vert \theta) 
 		\mathbb{P}(\theta)}{\mathbb{P}(D)}$,
 	\end{center}
-	wobei $\mathbb{P}(D) = \int \mathbb{P}(D \vert \theta) \mathbb{P}(\theta)$.
+	wobei $\mathbb{P}(D) = \int \mathbb{P}(D \vert \theta) d\mathbb{P}(\theta)$.
 \end{defi}
 
-In dem Posterior sind die kombinierte statistische Information der Annahmen, sowie der beobachteten Daten, über $\theta$ enthalten. Den Prozess der Berechnung des Posteriors wird oft auch \texit{Training} genannt, in diesem Kontext nennt man $D$ oft auch \textit{Trainingsdaten}. 
-%Variational Bayes und berechnung schwierig anmerken + likelihood und prior
+In dem Posterior sind die kombinierte statistische Information der Annahmen, sowie der beobachteten Daten, über $\theta$ enthalten. Der Posterior besteht aus der Likelihood $\mathbb{P}(D\vert \theta)$, dem Prior $\mathbb{P}(\theta)$, sowie einem Normalisierungsfaktor $\mathbb{P}(D)$. 
+
+Der Prozess der Berechnung des Posteriors wird oft auch \textit{Training} genannt, in diesem Kontext nennt man $D$ oft auch \textit{Trainingsdaten}. Die exakte Berechnung des Posteriors gestaltet sich bei großen Datenmengen $D$ als schwierig, besonders wenn sogenannte latente Variablen im Modell auftreten. Latente Variablen $Z$ sind Variablen, die nicht beobachtet werden können, und bei denen somit keine Daten zur Verfügung stehen. Diese treten häufig im Kontext von Bayesianischen Netzwerken, Modellen zur Textkategorisierung, rekurrenten Neuronalen Netzwerken und Sprach- sowie Texterkennung auf. Für einführende Beispiele von Modellen mit latenten Variablen im Machine Learning verweisen wir beispielhaft auf den Vortrag \cite{Latent_Variables}. 
+
+Es bestehen Möglichkeiten zur approximativen Bestimmung des Posteriors. Als Beispiel einer statistischen Methode zur approximativen Berechnung seien hier die \textit{Markov-Chain-Monte-Carlo-Verfahren} genannt. Weiterhin gibt es analytische Approximationen, welche auf große Klassen von Verteilungen angewandt werden können. Beispielhafte Techniken sind die \textit{Expectation-Maximization-Algorithmen} und \textit{Variational-Bayes-Methoden}. Für eine Einführung in erstere, siehe \cite{Exp_Max}, für eine ausführliche Behandlung des letzteren im Rahmen des Machine Learning siehe \cite{Var_Bayes}. 
+
+
+%Bsp Münzwurf??? eher nicht oder 
+
+
+Wir nutzen den nun eingeführten Posterior um eine Bayesianische Art von Parameterschätzer zu definieren, den sogenannten Maximum-A-Posteriori-Schätzer. Zuvor wiederholen wir Begriff des Maximum-Likelihood-Schätzers.
+
+\begin{defi}{Maximum-Likelihood-Schätzer}
+	Sei $D = (d_1, \cdots, d_n)$ ein Datensatz, $\theta$ ein $\mathbb{R}^k$-wertiger 
+	Parameter. Dann heißt der Schätzer
+	\begin{center}
+		$\hat{\theta}_{MLE} := \underset{\theta}{arg max} \mathbb{P}(D \vert \theta)$
+	\end{center}
+	\textit{Maximum-Likelihood-Schätzer}, kurz \textit{MLE-Schätzer}.
+\end{defi}
+
+Es sei hier erwähnt, dass ein tiefer Zusammenhang der Parameterschätzung und Optimierungsmethoden auf Mannigfaligketien besteht. Betrachtet man den Raum aller Parameter $\theta \in \Theta$ und versieht diesen mit der Fisher-Informations-Metrik, so erhält man eine riemannsche Mannigfaltigkeit, dessen Punkte als die zu den Parametern gehörigen Verteilungen interpretiert werden können. Y. Ollivier et. al. (2017) führen auf diese Weise ein Schema mit Black-Box-Ansatz zur Konstruktion von Optimierungsmethoden mit Hilfe des zur Fisher-Informations-Metrik gehörenden natürlichen Gradienten ein. Leser mit Interesse an Differentialgeometrie und numerischer Optimierung verweisen wir auf \cite{Info_Geom}. Für eine kurze Einführung in das Gebiet der Informationsgeometrie verweisen wir auf \cite{Info_Geom_intro}.
+
+Nun führen wir in Analogie zu dem MLE-Schätzer den Bayesianischen Maximum-A-Posteriori-Schätzer ein.
+
+\begin{defi}[Maximum-A-Posteriori-Schätzer]
+	Sei $D = (d_1, \cdots, d_n)$ ein Datenvektor, $\theta$ ein $\mathbb{R}^k$-wertiger
+	Parameter mit A Priori Verteilung $\mathbb{P}(\theta)$. Dann heißt der Schätzer
+	\begin{center}
+		$\hat{\theta}_{MAP} := \underset{\theta}{arg max} \mathbb{P}(\theta \vert 					D)$
+	\end{center}
+	\textit{Maximum-A-Posteriori-Schätzer}, kurz \textit{MAP-Schätzer}. Hierbei ist 
+	$\mathbb{P}(\theta \vert D)$ der Posterior von $\theta$ gegeben $D$.
+\end{defi}
+
+Der MAP-Schätzer ist ein statistischer Schätzer, der sich von dem MLE-Schätzer dadurch unterscheidet, dass er sowohl A Priori Annahmen an die Verteilung, als auch Daten bei der Parameterschätzung berücksichtigt. Diesen Zusammenhang erkennt man an folgender Proposition:
+
+%Darstellung MAP-Schätzer
+
 
 %verweis zu informationsgeometrie, Herr Schulz findet das bestimmt super
+
+%bibtex kommas hinkriegen
 
 \nocite{*}
 \bibliographystyle{plain}
