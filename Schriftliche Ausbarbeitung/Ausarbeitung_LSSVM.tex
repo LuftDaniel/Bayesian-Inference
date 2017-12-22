@@ -1,0 +1,75 @@
+\documentclass{report}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}% schicke Nummerierung
+\usepackage{graphicx}
+\usepackage[english, ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{bigdelim}
+\usepackage{multirow}
+\usepackage{dsfont, hyperref}
+\usepackage{cite}
+\usepackage[nottoc]{tocbibind}
+\usepackage{empheq}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{lipsum}
+\geometry{a4paper,left=40mm,right=30mm, top=5cm, bottom=5cm} 
+
+
+
+\newtheoremstyle{linebreak}   % name
+{3pt}                         % Space above
+{3pt}                         % Space below
+{}                            % Body font
+{}                            % Indent amount 1
+{\bfseries}                   % Theorem head font
+{\newline}                    % Punctuation after theorem head
+{.5em}                        % Space after theorem head 2
+{}                            % Theorem head spec (can be left empty, meaning ‘normal’)
+\theoremstyle{linebreak}
+\newtheorem{defi}{Definition}%[chapter]
+\newtheorem{satz}[defi]{Satz}
+\newtheorem{theorem}[defi]{Theorem}
+\newtheorem{propo}[defi]{Proposition}
+\newtheorem{lemma}[defi]{Lemma}
+\newtheorem{cor}[defi]{Korollar}
+\newtheorem{bem}[defi]{Bemerkung}
+\newtheorem{bsp}[defi]{Beispiel}
+\newtheorem{folg}[defi]{Folgerung}
+%bemerkungen oder Fließtext???
+ \newcommand{\newln}{\\&\quad\quad{}}
+
+\renewenvironment{abstract}
+ {\small
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{%
+    \setlength{\leftmargin}{12mm}% <---------- CHANGE HERE
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \item\relax}
+ {\endlist}
+
+
+
+
+\begin{document}
+\title{Seminar über Numerische Methoden im Machine Learning \\ Bayesianische Inferenz}
+
+\author{Daniel Luft & Fabian Gernandt \\ Prof. Dr. V. Schulz}
+%\maketitle
+
+%\tableofcontents 
+\selectlanguage{ngerman}
+
+\subsection{Least-Squares-SVM}
+
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{papers}
+
+\end{document}
