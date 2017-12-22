@@ -150,7 +150,7 @@ Wir nutzen den nun eingeführten Posterior um eine Bayesianische Art von Paramet
 	Sei $D = (d_1, \cdots, d_n)$ ein Datensatz, $\theta$ ein $\mathbb{R}^k$-wertiger 
 	Parameter. Dann heißt der Schätzer
 	\begin{center}
-		$\hat{\theta}_{MLE} := \underset{\theta}{arg max} \mathbb{P}(D \vert \theta)$
+		$\hat{\theta}_{MLE} := \underset{\theta}{\arg \max} \mathbb{P}(D \vert \theta)$
 	\end{center}
 	\textit{Maximum-Likelihood-Schätzer}, kurz \textit{MLE-Schätzer}.
 \end{defi}
@@ -163,7 +163,7 @@ Nun führen wir in Analogie zu dem MLE-Schätzer den Bayesianischen Maximum-A-Po
 	Sei $D = (d_1, \cdots, d_n)$ ein Datenvektor, $\theta$ ein $\mathbb{R}^k$-wertiger
 	Parameter mit A Priori Verteilung $\mathbb{P}(\theta)$. Dann heißt der Schätzer
 	\begin{center}
-		$\hat{\theta}_{MAP} := \underset{\theta}{arg max} \mathbb{P}(\theta \vert 					D)$
+		$\hat{\theta}_{MAP} := \underset{\theta}{\arg \max} \mathbb{P}(\theta \vert 					D)$
 	\end{center}
 	\textit{Maximum-A-Posteriori-Schätzer}, kurz \textit{MAP-Schätzer}. Hierbei ist 
 	$\mathbb{P}(\theta \vert D)$ der Posterior von $\theta$ gegeben $D$.
@@ -171,6 +171,21 @@ Nun führen wir in Analogie zu dem MLE-Schätzer den Bayesianischen Maximum-A-Po
 
 Der MAP-Schätzer ist ein statistischer Schätzer, der sich von dem MLE-Schätzer dadurch unterscheidet, dass er sowohl A Priori Annahmen an die Verteilung, als auch Daten bei der Parameterschätzung berücksichtigt. Diesen Zusammenhang erkennt man an folgender Proposition:
 
+\begin{propo}[Darstellung des MAP-Schätzers]
+	Es gelten folgende Identitäten des MAP-Schätzers:
+	\begin{align*}
+	\hat{\theta}_{MAP} :&= \underset{\theta}{\arg \max} \mathbb{P}(\theta \vert D) \\
+						&= \arg\underset{\theta \in \Theta}{\max} \frac{ \mathbb{P}(x									\vert\theta) \mathbb{P}(\theta)}{\int  \mathbb{P}(x\vert 									\theta) d\mathbb{P}(\theta)} \\
+ 						&= \arg\underset{\theta \in \Theta}{\max}  \mathbb{P}(x\vert 									\theta) \mathbb{P}(\theta) \\
+					 	&= \arg\underset{\theta \in \Theta}{\max} \log\mathbb{P}(x\vert 								\theta) + \log \mathbb{P}(\theta)
+	\end{align*}
+\end{propo}
+
+\begin{proof}
+Definition des MAP-Schätzers und des Posteriors, sowie die Tatsache, \\ dass $\int  \mathbb{P}(x\vert \theta) d\mathbb{P}(\theta) \in \mathbb{R}$ als Skalar nicht von $\theta$ abhängt und $\log$ monoton wachsend ist.
+\end{proof}
+
+Besonders anhand der letzten Identität erkennt man, dass der MAP-Schätzer die Information der Daten $D$ im log-Likelihood-Anteil mit der A Priori-Information des log-transformierten Priors kombiniert. Diese Darstellungen werden wir im weiteren verwenden um Optimierungsprobleme. Im Wesentlichen wird es bei allen Herleitungen in den folgenden Kapiteln darum gehen, durch das Aufstellen des MAP-Schätzers in verschiedenen Situationen regularisierte oder gänzlich neue Problemstellungen und Verfahren im Machine Learning herzuleiten. Da wir nun die Grundlagen eingeführt haben, fahren wir fort mit unserem ersten nichttrivialen Anwendungsbeispiel, der Bayesianischen Regression.
 %Darstellung MAP-Schätzer
 
 
