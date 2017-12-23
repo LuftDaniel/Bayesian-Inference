@@ -65,6 +65,20 @@
 %\tableofcontents 
 \selectlanguage{ngerman}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Algorithmen zur Lösung???
+
+%Schreibweise: Kernel oder Kerne??
+
+%SKALARES PROBLEM?
+
+%Verweis auf voriges Kapitel + Klärung der Begriffe n_f, N_eff nicht vergessen!
+
+%Ausblick   + Algorithmus (evtl extra Kapitel mit sachen zur implementierung und bildern)
+
+%diagramme nicht vergessen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Hyperparameterschätzung \& Kernelselektion}
 
 Nachdem wir nun in dem vorangehenden Kapitel gesehen haben wie man die LS-SVM und ihr duales Problem herleitet, knüpfen wir darauf aufbauend an und leiten mögliche Arten der Hyperparameterschätzung und der Kernelselektion her. 
@@ -176,14 +190,87 @@ sowie den nichttrivialen Eigenwerten $\lambda_i$ der zentrierten Kernelmatrix.
 
 \begin{align*}
 	\frac{\partial \mathcal{J}_\text{hyp}}{\partial \mu} = & \hat{w}_{MAP}^T \hat{w}			_{MAP} + \frac{1}{2} \overset{N_{eff}}{\underset{i=1}{\sum}} \frac{1}{\mu + \xi 			\lambda_i} - \frac{N_{eff}}{2\mu} \\
-    \frac{\partial \mathcal{J}_\text{hyp}}{\partial \xi} = & \overset{n}						{\underset{i=1}{\sum}}( y_i - (\hat{w}_{MAP}^T \varphi(x_i) + \hat{b}_{MAP}))^2 + \overset{N_{eff}}{\underset{i=1}{\sum}} \frac{\lambda_i}{\mu + \xi \lambda_i} - \frac{N-1}{2\xi}
+    \frac{\partial \mathcal{J}_\text{hyp}}{\partial \xi} = & \overset{n}						{\underset{i=1}{\sum}}( y_i - (\hat{w}_{MAP}^T \varphi(x_i) + \hat{b}_{MAP}))^2 + \overset{N_{eff}}{\underset{i=1}{\sum}} \frac{\lambda_i}{\mu + \xi \lambda_i} - \frac{N-1}{2\xi}.
 \end{align*} 
+\end{theorem}
+
+\begin{proof}
+Wir verwenden die beiden vorausgegangenen Lemmata und erhalten durch einsetzen und der Definition des MAP-Schätzers, sowie negativer log-Transformation:
+\begin{align*}
+	(\hat{\mu}_{MAP}, \hat{\xi}_{MAP}) 
+	=& \underset{\mu, \xi}{\arg \max} \mathbb{P}(\mu, \xi \vert D, K) \\
+	=& \underset{\mu, \xi}{\arg \max} \mathbb{P}(\log(\mu) \log(\xi) \vert D, K) \\
+	=& \underset{\mu, \xi}{\arg \max} \mathbb{P}(D \vert \log(\mu), \log(\xi), K) \\
+	=& \underset{\mu, \xi}{\arg \max} \frac{\sqrt{\mu^{n_f} \xi^n}}	{\sqrt{\det H}} 				\exp(- \mathcal{J}(\hat{w}_{MAP},\hat{b}_{MAP})) \\
+	=& \underset{\mu, \xi}{\arg \max} \frac{\sqrt{\mu^{n_f} \xi^n}}	{\sqrt{n \mu^{n_f - 			N_{eff}} \xi \underset{i=1}{\overset{N_{eff}}{\prod}}(\mu + 			\xi 				\lambda_i)}} \exp(- \mathcal{J}(\hat{w}_{MAP},\hat{b}_{MAP})) \\
+	=& \underset{\mu, \xi}{\arg \max} \frac{\sqrt{\mu^{N_{eff}} \xi^{n-1}}}	{\sqrt{ 				\underset{i=1}{\overset{N_{eff}}{\prod}}(\mu + 	\xi	\lambda_i)}} \exp(- 					\mathcal{J}(\hat{w}_{MAP},\hat{b}_{MAP})) \\
+	=& \underset{\mu, \xi}{\arg \min}  \hspace{0.2cm} \mathcal{J}(\hat{w}_{MAP}, 			   	 	\hat{b}_{MAP}) + \frac{1}{2}\sum_{i=1}^{N_{eff}}\log(\mu + \xi \lambda_i)\\
+	 & \hspace{0.8cm}- \frac{N_{eff}}{2}\log(\mu) - \frac{n -1 }{2}\log(\xi),
+\end{align*}
+
+was uns (i) liefert. (ii) erhalten wir direkt durch partielles Ableiten.
+
+\end{proof}
+
+Dieses Minimierungsproblem ermöglicht es die Wahl der Hyperparameter mit Hilfe eines rigorosen Verfahrens zu treffen, statt durch "Tuning per Hand" und verschiedenen anderen heuristischen Methoden. Um das Zielfunktional aufzustellen benötigt man die Eigenwerte $\lambda_i$ der zentrierten Kernelmatrix. Es fällt auf, dass die größe der zentrierten Kernelmatrix mit der Größe des Datenvektors $D$ wächst, so dass bei großen Datenmengen extrem viele Eigenwerte auftreten können. In der Praxis wird dem begegnet, indem man approximativ die größten Eigenwerte berechnet und so das Zielfunktional annähert. Dies geschieht beispielsweise, sogar bei unendlichdimensionalem Feature-Space, mit einem Expectation-Maximization-Algorithmus, siehe etwa \cite{Kernel_PCA}. Für umfassende Details zur Spektraltheorie von Kernen im Rahmen des Machine Learning verweisen wir auf \cite{spectral_kernel}.
+
+%Algorithmen zur Lösung???
+
+%SKALARES PROBLEM?
 
 
-(iii) Schließlich gilt im Optimum folgende Relation:
+Nachdem wir eine mögliche Antwort auf die Frage der Auswahl von Hyperparametern gegeben haben, wollen wir uns mit der auf der nächst höheren Ebene liegenden Frage der Kernelselektion beschäftigen. Im Allgemeinen ist die Wahl des Kernels zum durchführen des Kerneltricks im Rahmen der nichtlinearen Trennung mittels LS-SVM höchst nicht-trivial. Wir verwenden, nach \cite{LS-SVM}, den Ansatz die Kernel $K_i$ und die jeweils zugehörige LS-SVM mit ihren Parametern $w_i, b_i, \mu_i, \xi_i$ als verschiedene Modelle zu betrachten, und Modellauswahl traditionell bayesianischer Art durchzuführen. Für eine umfassende Einführung in Techniken der Bayesianischen Modellselektion empfehlen wir \cite{Bayes_model_selection}. Im folgenden Stellen wir den recht simplen Ansatz von Gestel, Suykens et. al. vor.
 
+Ein Ansatz der Bayesianische Modelselektion basiert auf einem Ranking der Kernel durch die zugehörige A Posteriori Modellevidenz $\mathbb{P}(K_i\vert D)$. Wir beschränken uns hier auf die Auswahl unter endlich vielen Kernen $\{K_i\}_{i=1,...,m}$. Die Auswahl wird durch die Wahl des Kernels mit der größten Evidenz $\mathbb{P}(K_i\vert D)$ getätigt. Da wir nur endlich viele Kernel zur Auswahl stellen, läuft dies auf ein heuristisches Auswählen und sortieren hinaus.
+
+Ähnlich wie in den vorangegangenen Betrachtungen platzieren wir A Priori Verteilungen, diesmal auf die Kernel $K_I$ selber. Dabei nehmen wir an:
+
+\begin{itemize}
+	\item Platziere (diskrete) a priori Verteilung auf die Kerne $K_i$:
+		\begin{center}
+			$\mathbb{P}(K_i) = p_i, \sum_{i=1}^{m} \mathbb{P}(K_i) = 1$
+		\end{center}
+	\item Nehme eine Gleichverteilung an, d.h. $p_i = p_j$ für alle $i,j = 1,...,M$.
+	\item Seien die Hyperparameter $\mu_i, \xi_i$ der jeweiligen Models mit Kern $K_i$ 				  stochastisch unabhängig und haben folgende Verteilung:
+		  \begin{center}
+				$\log(\mu_i) \sim \mathcal{N}(0, \sigma_{\mu_i}^2), \log(\xi_i) \sim 						\mathcal{N}(0, \sigma_{\xi_i}^2)$ 
+		  \end{center}
+	\item $\sigma_{\mu_i}^2, \sigma_{\xi_i}^2 \rightarrow \infty$ für alle $i = 1,...,M				   $.
+\end{itemize}
+
+Es ist auch möglich ganze Familien von Kerneln zu betrachten, und unter diesen zu Selektieren. Ein Beispiel wäre die Wahl des geeigneten Kernelparameters eines RBF-Kerns. Diese Fragestellung führt jedoch zu nicht-trivialen Minimierungsproblem in dem Sinne, dass keine einfache Heuristik zu Wahl des optimalen Kernels exisitiert.
+
+Der folgende Satz gibt als weiteres Hauptresultat an, wie man die Evidenzen $\mathbb{P}(K_i \vert D)$ in Proportionalität berechnen kann, und somit Kernel selektieren kann.
+
+
+\begin{theorem}[Berechnung der Evidenz zur Kernelselektion]
+Seien die obigen Annahmen erfüllt. Weiterhin sei ein Datenvektor $D$ gegeben, so dass die A Posteriori Verteilungen $\mathbb{P}(\log(\mu),\log(\xi) \vert D, K_i)$ eine positiv definite Kovarianzmatrix besitzt. Dann gilt:
+
+\begin{align*}
+	\mathbb{P}(K_i \vert D) 
+	&\propto \mathbb{P}(D \vert K_i)\\
+ 	&\propto \mathbb{P}(D \vert \log(\hat{\mu}_{i_{MAP}}), \log(\hat{\xi}_{i_{MAP}}), 			K_i)\frac{\sigma_{\mu_i\vert D} \sigma_{\xi_i\vert D}}{\sigma_{\mu_i} 						\sigma_{\xi_i}}\\
+	&\propto \sqrt{\frac{\hat{\mu}^{N_{eff}}_{i_{MAP}} \hat{\xi}^{n-1}_{i_{MAP}}}				{(\gamma_{eff}-1)(n - \gamma_{eff}) \prod_{j=1}^{N_{eff}}(\hat{\mu}_{i_{MAP}} + 			\hat{\xi}_{i_{MAP}}\lambda_j)}}
+\end{align*}
+
+wobei $\gamma_{eff} = 1 + \sum_{j=1}^{N_{eff}}\frac{\hat{\xi}_{i_{MAP}}\lambda_j}{\hat{\mu}_{i_{MAP}} + \hat{\xi}_{i_{MAP}}\lambda_j}$.
 
 \end{theorem}
+
+\begin{proof}
+Die erste Proportionalität ergibt sich durch die Gleichverteilungsannahme an die $K_i$ und Definition des Posteriors:
+
+\begin{center}
+	$\mathbb{P}(K_i \vert D) = \frac{\mathbb{P}(D\vert K_i)\mathbb{P}(K_i)}{\mathbb{P}			(D)}
+	\propto \mathbb{P}(D \vert K_i)$
+\end{center}
+Für den Rest verweisen wir auf \cite{LS-SVM}.
+\end{proof}
+
+Der Faktor $\frac{\sigma_{\mu_i\vert D} \sigma_{\xi_i\vert D}}{\sigma_{\mu_i} 						\sigma_{\xi_i}}$ wird auch mit Occam's Faktor bezeichnet, benannt nach dem mittelalterlichen Philosophen Wilhelm von Ockham, auf den auch der bekannte Begriff der Occam'schen Rasierklinge zurückgeht. Bemerkenswert an der obigen proportionalen Darstellung ist, dass sobald man MAP-Schätzer und Eigenwerte aus vorangehender Analyse gebildet hat, die Modellevidenz im Proportionalen sofort berechnet werden kann. Bei Optimierung hinsichtlich ganzer Kernelfamilien ließe sich diese Proportionalität als Ansatz nutzen um ein Minimierungsproblem herzuleiten.
+
+
+
 
 
 
