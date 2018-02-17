@@ -78,7 +78,7 @@
 
 \section{Mathematische Grundlagen}
 
-\frame{\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
+\frame{\frametitle{Inhaltsverzeichnis}\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
 
 \subsection{Grundlagen der Bayes Statistik}
 
@@ -316,7 +316,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 
 \section{Bayesian Regression}
 
-\frame{\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
+\frame{\frametitle{Inhaltsverzeichnis}\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
 
 \subsection{Ridge-Regression}
 
@@ -497,7 +497,7 @@ Es gelten die folgenden Transformationen des MAP-Schätzers:
 
 \section{Bayesian Framework für SVM}
 
-\frame{\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
+\frame{\frametitle{Inhaltsverzeichnis}\tableofcontents[currentsection,subsectionstyle=show/shaded,hideothersubsections]}
 
 \subsection{Wiederholung SVM}
 %support vector machines beispiel mit ovarian tumors
@@ -732,26 +732,27 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 	\hfill\\[0,3cm]
 	\pause Lagrange-Funktion des Optimierungsproblems:
 	\begin{align}
-		\mathcal{L}(w,b,e;\alpha)&\;=\;\mathcal{J}(w,b)-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e_i\right)\\
-		\uncover<2->{&\;=\;\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2-\sum_{i=1}^{n}\alpha_i\left(y_i-\left(w^T\varphi(x_i)+b\right)-e\right)}\\
+		\mathcal{L}(w,b,e;\alpha)&\;=\;\mathcal{J}(w,b)-\sum_{i=1}^{n}\alpha_i\left(y_i\left(w^T\varphi(x_i)+b\right)-1+e_i\right)\\
+		\uncover<2->{&\;=\;\frac{1}{2}w^Tw+\frac{\gamma}{2}\sum_{i=1}^{n}e_i^2-\sum_{i=1}^{n}\alpha_i\left(y_i\left(w^T\varphi(x_i)+b\right)-1+e_i\right)}\\
 	\end{align}
 \end{frame}
 
 \begin{frame}{Lösung der LS-SVM}
 	Optimalitätsbedingungen:
 	\begin{alignat}{4}
-		& \frac{\partial \mathcal{L}}{\partial w} &&\;=\;0 && \quad\Leftrightarrow\quad w\;=\;\sum_{i=1}^{n}\alpha_i\varphi(x_i) && \\[0,3cm]
-		& \frac{\partial \mathcal{L}}{\partial b} &&\;=\;0 && \quad\Leftrightarrow\quad \sum_{i=1}^{n}\alpha_i\;=\;0 && \\[0,3cm]
+		& \frac{\partial \mathcal{L}}{\partial w} &&\;=\;0 && \quad\Leftrightarrow\quad w\;=\;\sum_{k=1}^{n}\alpha_ky_k\varphi(x_k) && \\[0,3cm]
+		& \frac{\partial \mathcal{L}}{\partial b} &&\;=\;0 && \quad\Leftrightarrow\quad \sum_{k=1}^{n}\alpha_ky_k\;=\;0 && \\[0,3cm]
 		& \frac{\partial \mathcal{L}}{\partial e_i} &&\;=\;0 && \quad\Leftrightarrow\quad \alpha_i\;=\;\gamma e_i, && i\;=\;1,\dots,n\\[0,3cm]
-		& \frac{\partial \mathcal{L}}{\partial \alpha_i} &&\;=\;0 && \quad\Leftrightarrow\quad y_i\;=\;w^T\varphi(x_i)+b+e_i,\quad && i\;=\;1,\dots,n
+		& \frac{\partial \mathcal{L}}{\partial \alpha_i} &&\;=\;0 && \quad\Leftrightarrow\quad 1\;=\;y_i\left(w^T\varphi(x_i)+b\right)+e_i,\quad && i\;=\;1,\dots,n
 	\end{alignat}
 \end{frame}
 
 \begin{frame}{Lösung der LS-SVM}
 	Eliminierung von $w$ und $e$ liefert das LGS
 	\begin{alignat}{2}
-		&\sum_{i=1}^{n}\alpha_i \;=\;0 && \\
-		&y_i\;=\;\sum_{i=1}^{n}\alpha_k\varphi(x_k)^T\varphi(x_i)+b+\gamma^{-1}\alpha_i,\quad && i=1,\dots,n
+		&\sum_{k=1}^{n}\alpha_ky_k \;=\;0 && \\
+		&1\;=\;y_i\left(\sum_{k=1}^{n}\left[\alpha_ky_k\varphi(x_k)^T\varphi(x_i)\right]+b\right)+\gamma^{-1}\alpha_i,\quad && i=1,\dots,n\\
+		&1\;=\;\sum_{k=1}^{n}\left[\alpha_ky_ky_i\varphi(x_k)^T\varphi(x_i)\right]+y_ib+\gamma^{-1}\alpha_i,\quad && i=1,\dots,n
 	\end{alignat}
 \end{frame}
 
@@ -759,8 +760,8 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 	In Matrixschreibweise lautet das LGS
 	\begin{align}
 		\begin{bmatrix}
-			0& 1_n^T \\[0,5cm]
-			1_n& \Omega+\gamma^{-1}I_n
+			0& y^T \\[0,5cm]
+			y& \Omega+\gamma^{-1}I_n
 		\end{bmatrix}
 		\begin{bmatrix}
 			b \\[0,2cm]
@@ -768,18 +769,15 @@ unter $e_i = 1 - y_i(w^T \phi(x_i) +b)$
 		\end{bmatrix}\;=\;
 		\begin{bmatrix}
 			0 \\[0,2cm] 
-			y
+			1_n
 		\end{bmatrix},
 	\end{align}
 	wobei
 	\begin{align}
 		y &\;=\;(y_1,\dots,y_n)^T,\\
 		1_n &\;=\;(1,\dots,1)^T\in\mathbb{R}^n,\\
-		\alpha &\;=\;(\alpha_1,\dots,\alpha_n)^T.
-	\end{align}\pause
-	$\Omega\in\mathbb{R}^{n\times n}$ ist die Kernel-Matrix, welche nach dem Mercer-Theorem bestimmt wird.
-	\begin{align}
-		\Rightarrow\quad\Omega_{ij} \;=\;\varphi(x_i)^T\varphi(x_j)\;=\;K(x_i,x_j)
+		\alpha &\;=\;(\alpha_1,\dots,\alpha_n)^T,\\
+		\Omega_{ij} &\;=\;y_iy_j\varphi(x_i)^T\varphi(x_j)\;=\;y_iy_jK(x_i,x_j)
 	\end{align}
 \end{frame}
 
