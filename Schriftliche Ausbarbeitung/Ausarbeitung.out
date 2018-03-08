@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section.1}{Einf\374hrung in die Bayes Theorie}{}% 1
+\BOOKMARK [1][-]{section.2}{Bayesian Regression}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Multiple lineare Regression}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Ridge-Regression}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Der Lasso-Sch\344tzer}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Least-Squares-Support Vector Machine}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Klassische Support Vector Machine}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Linear trennbare Daten}{subsection.3.1}% 8
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Nicht-linear trennbare Daten}{subsection.3.1}% 9
+\BOOKMARK [3][-]{subsubsection.3.1.3}{Nicht-lineare Erweiterung mit Kernelfunktionen}{subsection.3.1}% 10
+\BOOKMARK [2][-]{subsection.3.2}{Least-Squares-SVM}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{Hyperparametersch\344tzung \046 Kernelselektion}{}% 12
+\BOOKMARK [2][-]{subsection.4.1}{Hyperparametersch\344tzung}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.2}{Kernelselektion}{section.4}% 14
+\BOOKMARK [1][-]{section*.2}{Literatur}{}% 15

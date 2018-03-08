@@ -1,0 +1,6 @@
+\begin{tikzpicture}[cross/.style={draw, cross out, 
+		  minimum size=2*(#1-1pt), inner sep=0pt, outer sep=0pt}]
+			\node[inner sep=0pt] (russell) at (0,0) {\includegraphics{SVMS.pdf}};
+			\draw[very thick, green] (-6.08, -1.44) -- (6.49, -1.44);
+			\draw[very thick, black] (-6.08, -0.85) -- (6.485, -0.325);
+\end{tikzpicture}

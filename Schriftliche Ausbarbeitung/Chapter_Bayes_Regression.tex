@@ -1,0 +1,92 @@
+\newpage
+\thispagestyle{plain}
+\section{Bayesian Regression}
+
+\subsection{Multiple lineare Regression}
+
+Als erstes nicht-triviales Anwendungsbeispiel soll die Bayes Regression dienen. Dieses Gebiet ist eine Abwandlung der multiplen linearen Regression und des kleinste-Quadrate-Schätzers. Deshalb wird die klassische Problemstellung der Regression kurz wiederholt. Das grundlegende Modell der multiplen linearen Regression lautet in Matrixschreibweise
+\begin{align*}
+	y\;=\;X\beta+\varepsilon.
+\end{align*}
+Dabei ist \(y\in\mathbb{R}^n\) die abhängige Variable bzw. der Modell-Output, \(X\in\mathbb{R}^{n\times (K+1)}\) die Matrix der unabhängigen Variablen bzw. des Input-Datensatzes mit \(K\) Variablen, \(\beta\in\mathbb{R}^{K+1}\) der Modell-Koeffizientenvektor und \(\varepsilon\in\mathbb{R}^{n}\) der Fehlerterm. Für \(\varepsilon\) wird generell eine Normalverteilungsannahme gemacht. Die Fehlerterme sind demnach multivariat normalverteilt mit Mittelwert 0 und Varianz \(\sigma^2I_n\). Da die Störgrößen \(\varepsilon\) sowie die wahren \(\beta\)-Koeffizienten generell unbekannt sind, muss das Modell geschätzt werden. Der Output-Vektor mit geschätztem \(\hat{\beta}\) lautet
+\begin{align*}
+	\hat{y}\;=\;X\hat{\beta}.
+\end{align*}
+Hierbei stellt sich nun die Frage nach einem geeigneten Schätzer, der das wahre \(\beta\) möglichst genau trifft. Der bei weitem bekannteste Schätzer für \(\beta\) ist der kleinste-Quadrate-Schätzer (kQ-Schätzer). Bei diesem Ansatz sollen die \(\beta\)-Koeffizienten des linearen Modells so bestimmt werden, dass die Summe der quadrierten Residuen minimal wird. Der Vektor der Residuen \(e\) ist dabei gegeben durch
+\begin{align*}
+	e\;=\;y-\hat{y}\;=\;y-X\hat{\beta},
+\end{align*}
+also die Abweichung vom gemessenen \(y\) zum geschätzten \(\hat{y}\). Die Summe der quadrierten Residuen ist dann \(e^Te\), welche als quadratische Funktion der Koeffizienten betrachtet werden kann. Es existiert somit immer ein Minimum. Dieses wird durch ableiten von \(e^Te=\left(y-X\hat{\beta}\right)^T\left(y-X\hat{\beta}\right)\) nach \(\hat{\beta}\) und anschließendes Nullsetzen bestimmt. Man erhält den (analytischen) kQ-Schätzer
+\begin{align*}
+	\hat{\beta}\;=\;\left(X^TX\right)^{-1}X^Ty.
+\end{align*}
+Dieser besitzt besondere Eigenschaften. Nach dem Gauss-Markov Theorem (vgl. \cite{Eco}, S.46-47) ist der kQ-Schätzer nun derjenige Schätzer für \(\beta\) mit der geringsten Varianz unter allen linearen und unverzerrten Schätzern (\textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator, \textbf{BLUE}).\\
+Allerdings ist der kQ-Schätzer nicht perfekt. Die Invertierung der Matrix \(\left(X^TX\right)\) kann problematisch werden, da diese zwar mindestens positiv semidefinit ist, aber ein Eigenwert nahe 0 die Inverse schlecht konditioniert. Er trifft das wahre \(\beta\) zwar im Erwartungswert, jedoch kann dessen Varianz wegen der Invertierung unter Umständen beliebig groß und der Schätzer damit beliebig ungenau werden. Dies tritt zum Beispiel bei Multikollinearität in den Input-Daten auf, also wenn Abhängigkeiten zwischen zwei oder mehr Variablen vorliegen. Als Alternative zum kQ-Schätzer wird nun der Ridge-Schätzer betrachtet.
+
+\subsection{Ridge-Regression}
+
+Der \textit{Ridge-Regression-Schätzer} (auch \textit{Ridge-Schätzer}), bekannt durch \textit{Hoerl} und \textit{Kennard} (vgl. \cite{Ridge}, 1970), ursprünglich von \textit{Tikhonov} (1943), ist die wohl meist verwendete Abwandlung des kQ-Schätzers zur Regularisierung von schlecht konditionierten Problemen. Der Schätzer folgt in seiner allgemeinen Form aus der Idee, dass die Matrix \(X^TX\) durch Addition einer positiv definiten Matrix sicher positiv definit wird. Konkret lautet der Ridge-Schätzer für \(\beta\)
+\begin{align*}
+	\hat{\beta}_{Ridge}\;=\;\left(X^TX+\lambda I_k\right)^{-1}X^Ty.
+\end{align*}
+Genauer löst der Schätzer das Minimierungsproblem
+\begin{align*}
+	\hat{\beta}_{Ridge}\;=\;\arg\underset{\beta}{\min}\left[\left(y-X\beta\right)^T\left(y-X\beta\right)+\lambda\beta^T\beta\right],
+\end{align*}
+wobei der erste Summand analog zum kQ-Minimierungsproblem ist und der zweite Summand eine Nebenbedingung an die \(\beta\)-Koeffizienten darstellt. Diese werden durch die Nebenbedingung gegen 0 geschoben und somit betraglich kleiner gehalten, als beim kQ-Schätzer.\\
+Obiges Zielfunktional soll nun mittels Bayes Ansatz hergeleitet werden. Die  Annahmen der multiplen linearen Regression können zunächst wie folgt interpretiert werden:
+\begin{align*}
+	\mathbb{P}(y_i\vert \beta)\;=\;\mathcal{N}(X_i\beta,\sigma^2),
+\end{align*}
+was bedeutet, dass der Output-Vektor \(y\) i.i.d ist und als multivariat normalverteilte Zufallsvariable mit Mittelwert \(X\beta\) und Kovarianzmatrix \(\sigma^2I_n\) angesehen werden kann, was direkt aus dem Grundmodell der multiplen linearen Regression folgt.\\
+Des weiteren wird nun eine a priori Annahme an die Regressionsgewichte \(\beta\) gemacht. Diese sollen nun ebenfalls normalverteilt sein. Die a priori Annahmen sind insgesamt:
+\begin{enumerate}[(i)]
+	\item \(\mathbb{P}(y_i\vert \beta)\;=\;\mathcal{N}(X_i\beta,\sigma^2)\)
+	\item \(\beta\sim \mathcal{N}(0, \tau^2 I_k)\)
+	\item \(y_i\) und \(\beta_i\) i.i.d.
+\end{enumerate}
+\hfill\\Mit den Annahmen folgt zum einen
+\begin{align*}
+	\mathbb{P}(y|\beta)&\;\overset{(\text{iii})}{=}\;\prod_{i=1}^{n}\mathbb{P}(y_i|\beta)\\
+	&\;\:\overset{(\text{i})}{=}\:\:\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_i\beta\right)^2}{2\sigma^2}\right),
+\end{align*}
+zum anderen
+\begin{align*}
+	\mathbb{P}(\beta)&\;\overset{(\text{iii})}{=}\;\prod_{i=1}^{k}\mathbb{P}(\beta_i)\\
+	&\,\,\:\!\overset{(\text{ii})}{=}\:\,\prod_{i=1}^{k}\frac{1}{\tau\sqrt{2\pi}}\exp\left(-\frac{\beta_i^2}{2\tau^2}\right).\qquad\;\;\:
+\end{align*}
+Nun ergibt sich mit Proposition \autoref{prop:map} für den MAP-Schätzer
+\begin{alignat*}{2}
+	\hat{\beta}_{\text{MAP}}&\;=\;\arg\underset{\beta}{\max}&& \log\mathbb{P}(y\vert \beta) + \log \mathbb{P}(\beta) \\
+	&\;=\;\arg\underset{\beta}{\max}&&\left[\log\left(\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_i\beta\right)^2}{2\sigma^2}\right)\right)\right.\\	&\hspace{1,7cm}+&&\:\:\left.\log\left(\prod_{i=1}^{k}\frac{1}{\tau\sqrt{2\pi}}\exp\left(-\frac{\beta_i^2}{2\tau^2}\right)\right)\right]\\
+	&\;=\;\arg\underset{\beta}{\max} && \left[-\sum_{i=1}^{n}\frac{\left(y_i-X_i\beta\right)^2}{2\sigma^2}-\sum_{i=1}^{k}\frac{\beta_i^2}{2\tau^2}\right]\\
+	&\;=\;\arg\underset{\beta}{\max} && \left[\frac{1}{2\sigma^2}\left(-\sum_{i=1}^{n}\left(y_i-X_i\beta\right)^2-\frac{\sigma^2}{\tau^2}\sum_{i=1}^{k}\beta_i^2\right)\right]\\
+	&\;=\;\arg\underset{\beta}{\min} && \left[\sum_{i=1}^{n}\left(y_i-X_i\beta\right)^2+\lambda\sum_{i=1}^{k}\beta_i^2\right]\\
+\end{alignat*}
+Damit erhält man das Ridge-Optimierungsproblem
+\begin{align*}
+	\hat{\beta}_{Ridge}\;=\;\arg\underset{\beta}{\min}\left[\left(y-X\beta\right)^T\left(y-X\beta\right)+\lambda \beta^T\beta\right].
+\end{align*}
+\hfill\\ Der Ridge-Schätzer besitzt die gewünschte Eigenschaft, schon bei kleinem \(\lambda\) die Varianz der Modellkoeffizienten zu reduzieren, ist aber verzerrt und besitzt als Erwartungswert nicht das wahre \(\beta\). \\
+Analog dazu lassen sich weitere Schätzer herleiten. Hier soll kurz noch der Lasso-Schätzer (least absolute shrinkage and selection operator) hergeleitet werden.
+
+\subsection{Der Lasso-Schätzer}
+
+Analog zum Ridge-Schätzer lässt sich der Lasso-Schätzer über eine Verteilungsannahme an die \(\beta\)-Koeffizienten herleiten. Grundlage des Lasso-Schätzers ist die Überlegung, anstelle einer \(L^2\)-Regularisierung einen \(L^1\)-Term in der Nebenbedingung als Regularisierer zu verwenden. Dazu wird als Prior eine Laplace-Verteilung angesetzt. Die Dichte der Laplace-Verteilung lautet
+\begin{align*}
+	f_{Laplace}(x|\mu,\tau)\;=\;\frac{1}{2\tau}\exp\left(-\frac{\left|x-\mu\right|}{\tau}\right)
+\end{align*}
+und man wählt \(\beta\sim Laplace(0, \tau)\) als Verteilungsannahme. Nun folgt analog zum Ridge-Schätzer mittels Proposition \autoref{prop:map} für den MAP-Schätzer
+\begin{alignat*}{2}
+	\hat{\beta}_{\text{MAP}}&\;=\;\arg\underset{\beta}{\max}&& \log\mathbb{P}(y\vert \beta) + \log \mathbb{P}(\beta) \\
+	&\;=\;\arg\underset{\beta}{\max}&&\left[\log\left(\prod_{i=1}^{n}\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{\left(y_i-X_i\beta\right)^2}{2\sigma^2}\right)\right)\right.\\	&\hspace{1,7cm}+&&\:\:\left.\log\left(\prod_{i=1}^{k}\frac{1}{2\tau}\exp\left(-\frac{\left|\beta_i\right|}{\tau}\right)\right)\right]\\
+	&\;=\;\arg\underset{\beta}{\max} && \left[-\sum_{i=1}^{n}\frac{\left(y_i-X_i\beta\right)^2}{2\sigma^2}-\sum_{i=1}^{k}\frac{\left|\beta_i\right|}{\tau}\right]\\
+	&\;=\;\arg\underset{\beta}{\max} && \left[\frac{1}{2\sigma^2}\left(-\sum_{i=1}^{n}\left(y_i-X_i\beta\right)^2-\frac{\sigma^2}{2\tau}\sum_{i=1}^{k}\left|\beta_i\right|\right)\right]\\
+	&\;=\;\arg\underset{\beta}{\min} && \left[\sum_{i=1}^{n}\left(y_i-X_i\beta\right)^2+\lambda\sum_{i=1}^{k}\left|\beta_i\right|\right]
+\end{alignat*}
+und man erhält das Lasso-Optimierungsproblem
+\begin{align*}
+	\hat{\beta}_{Lasso}\;=\;\arg\underset{\beta}{\min}\left[\left(y-X\beta\right)^T\left(y-X\beta\right)+\lambda\sum_{i=1}^{k}\left|\beta_i\right|\right].
+\end{align*}
+Dieser Schätzer besitzt wieder andere Eigenschaften, als der Ridge-Schätzer. Die beiden größten Unterschiede zum Ridge-Schätzer liegen darin, dass der Lasso-Schätzer zwar nur algorithmisch bestimmt werden kann, dafür aber die Koeffizienten genau auf 0 setzen kann, was bei der Ridge-Regression nur im Grenzfall \(\lambda\rightarrow\infty\) möglich ist.\\[0,3cm]
+Die beiden vorgestellten Schätzer sollen als Einführung in die Anwendung der Bayes Theorie genügen. Als nächstes wird ein weiterführendes Beispiel betrachtet, die Least-Square-Support Vector Machine als Alternative zur herkömmlichen Support Vector Machine.
