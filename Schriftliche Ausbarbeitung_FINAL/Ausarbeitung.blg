@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Ausarbeitung.aux
+The style file: plain.bst
+Database file #1: papers.bib
+Repeated entry---line 107 of file papers.bib
+ : @article{Ridge
+ :               ,
+I'm skipping whatever remains of this entry
+Name 1 in "T. Hofmann, B. Schölkopf, and A.J. Smola" has a comma at the end for entry Kernel
+while executing---line 1049 of file plain.bst
+Warning--empty journal in Info_Geom_intro
+Warning--empty journal in Ridge
+Warning--empty journal in Bayes_model_selection
+Warning--empty journal in Statistik_Schmidt
+Warning--empty journal in LS-SVM
+Warning--empty journal in LS-SVM_b
+Warning--empty journal in Eco
+Warning--empty journal in SVM
+Warning--empty journal in Exp_Max
+Warning--empty journal in Var_Bayes
+Warning--empty journal in Latent_Variables
+Warning--empty journal in Kernel_PCA
+Warning--empty journal in spectral_kernel
+Name 1 in "T. Hofmann, B. Schölkopf, and A.J. Smola" has a comma at the end for entry Kernel
+while executing---line 1090 of file plain.bst
+Warning--empty journal in Kernel
+You've used 15 entries,
+            2118 wiz_defined-function locations,
+            583 strings with 6113 characters,
+and the built_in function-call counts, 3270 in all, are:
+= -- 311
+> -- 111
+< -- 1
++ -- 50
+- -- 32
+* -- 140
+:= -- 606
+add.period$ -- 45
+call.type$ -- 15
+change.case$ -- 61
+chr.to.int$ -- 0
+cite$ -- 29
+duplicate$ -- 158
+empty$ -- 268
+format.name$ -- 32
+if$ -- 654
+int.to.chr$ -- 0
+int.to.str$ -- 15
+missing$ -- 15
+newline$ -- 78
+num.names$ -- 30
+pop$ -- 77
+preamble$ -- 1
+purify$ -- 46
+quote$ -- 0
+skip$ -- 120
+stack$ -- 0
+substring$ -- 98
+swap$ -- 8
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 60
+warning$ -- 14
+while$ -- 32
+width$ -- 17
+write$ -- 145
+(There were 3 error messages)
